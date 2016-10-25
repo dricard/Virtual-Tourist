@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2118444E1DBFB5FC0045B2E2 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2118444D1DBFB5FC0045B2E2 /* PhotoCell.swift */; };
 		211844501DBFD99B0045B2E2 /* NetworkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2118444F1DBFD99B0045B2E2 /* NetworkAPI.swift */; };
+		211844531DBFE1560045B2E2 /* APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211844521DBFE1560045B2E2 /* APIKey.swift */; };
 		21A1C10E1DBFAEC6006A0E71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21A1C10D1DBFAEC6006A0E71 /* Assets.xcassets */; };
 		21A1C1111DBFAEC6006A0E71 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21A1C10F1DBFAEC6006A0E71 /* LaunchScreen.storyboard */; };
 		21A1C1191DBFAF9B006A0E71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C1181DBFAF9B006A0E71 /* AppDelegate.swift */; };
@@ -26,6 +27,7 @@
 /* Begin PBXFileReference section */
 		2118444D1DBFB5FC0045B2E2 /* PhotoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		2118444F1DBFD99B0045B2E2 /* NetworkAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkAPI.swift; sourceTree = "<group>"; };
+		211844521DBFE1560045B2E2 /* APIKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
 		21A1C1031DBFAEC6006A0E71 /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		21A1C10D1DBFAEC6006A0E71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		21A1C1101DBFAEC6006A0E71 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 			isa = PBXGroup;
 			children = (
 				2118444F1DBFD99B0045B2E2 /* NetworkAPI.swift */,
+				211844521DBFE1560045B2E2 /* APIKey.swift */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -207,6 +210,7 @@
 				2118444E1DBFB5FC0045B2E2 /* PhotoCell.swift in Sources */,
 				21A1C11F1DBFB024006A0E71 /* PhotosViewController.swift in Sources */,
 				21A1C11D1DBFAFFC006A0E71 /* MapViewController.swift in Sources */,
+				211844531DBFE1560045B2E2 /* APIKey.swift in Sources */,
 				21A1C11B1DBFAFD4006A0E71 /* CoreDataStack.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
