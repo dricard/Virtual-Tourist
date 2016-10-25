@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2118444E1DBFB5FC0045B2E2 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2118444D1DBFB5FC0045B2E2 /* PhotoCell.swift */; };
 		21A1C10E1DBFAEC6006A0E71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21A1C10D1DBFAEC6006A0E71 /* Assets.xcassets */; };
 		21A1C1111DBFAEC6006A0E71 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21A1C10F1DBFAEC6006A0E71 /* LaunchScreen.storyboard */; };
 		21A1C1191DBFAF9B006A0E71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C1181DBFAF9B006A0E71 /* AppDelegate.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2118444D1DBFB5FC0045B2E2 /* PhotoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		21A1C1031DBFAEC6006A0E71 /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		21A1C10D1DBFAEC6006A0E71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		21A1C1101DBFAEC6006A0E71 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -49,6 +51,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2118444C1DBFB5B60045B2E2 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				2118444D1DBFB5FC0045B2E2 /* PhotoCell.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		21A1C0FA1DBFAEC6006A0E71 = {
 			isa = PBXGroup;
 			children = (
@@ -68,6 +78,7 @@
 		21A1C1051DBFAEC6006A0E71 /* Virtual Tourist */ = {
 			isa = PBXGroup;
 			children = (
+				2118444C1DBFB5B60045B2E2 /* View */,
 				21A1C12C1DBFB15D006A0E71 /* VC */,
 				21A1C12B1DBFB149006A0E71 /* Model */,
 				21A1C11A1DBFAFD4006A0E71 /* CoreDataStack.swift */,
@@ -181,6 +192,7 @@
 				21A1C1211DBFB046006A0E71 /* Photo+CoreDataClass.swift in Sources */,
 				21A1C1251DBFB0A8006A0E71 /* Pin+CoreDataClass.swift in Sources */,
 				21A1C1191DBFAF9B006A0E71 /* AppDelegate.swift in Sources */,
+				2118444E1DBFB5FC0045B2E2 /* PhotoCell.swift in Sources */,
 				21A1C11F1DBFB024006A0E71 /* PhotosViewController.swift in Sources */,
 				21A1C11D1DBFAFFC006A0E71 /* MapViewController.swift in Sources */,
 				21A1C11B1DBFAFD4006A0E71 /* CoreDataStack.swift in Sources */,
@@ -342,6 +354,7 @@
 				21A1C1171DBFAEC6006A0E71 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
