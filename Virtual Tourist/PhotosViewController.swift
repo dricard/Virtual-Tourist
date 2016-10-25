@@ -74,7 +74,40 @@ class PhotosViewController: UIViewController {
    // MARK: - Photos methods
    
    func fetchPhotos(pin: Pin) {
-      
+      NetworkAPI.sendRequest(pin) { (photosDict, success, error) in
+         
+         // GUARD: was there an error?
+         guard error == nil else {
+            print("Network request returned with error: \(error), \(error?.userInfo)")
+            return
+         }
+         
+         // GUARD: was it successful?
+         guard success else {
+            print("The request was unsuccessful: \(error), \(error?.userInfo)")
+            return
+         }
+         
+         // Process the photos dictionary
+         
+         if let photosDict = photosDict {
+            for photoDict in photosDict {
+               
+               let photo = Photo(context: self.managedContext)
+               photo.title = photoDict[Flickr.Title] as! String?
+               photo.imageURL = photoDict[Flickr.ImagePath] as! String?
+               photo.pin = pin
+            }
+         }
+         
+         do {
+            try self.managedContext.save()
+         } catch let error as NSError {
+            print("Could not save: \(error), \(error.userInfo)")
+         }
+         
+         self.displayPhotosForLocation(pin: pin)
+      }
    }
    
    func displayPhotosForLocation(pin: Pin) {
@@ -111,8 +144,8 @@ extension PhotosViewController: UICollectionViewDataSource {
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
       
       guard let pin = pin, let photos = pin.photos else { return cell }
-      
-      let photo = photos[indexPath.item] as Photo
+            
+      let photo = photos[indexPath.item]
       
       // Configure the cell
       
