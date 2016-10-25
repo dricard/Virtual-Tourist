@@ -7,21 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		21A1C1071DBFAEC6006A0E71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C1061DBFAEC6006A0E71 /* AppDelegate.swift */; };
-		21A1C1091DBFAEC6006A0E71 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C1081DBFAEC6006A0E71 /* ViewController.swift */; };
-		21A1C10C1DBFAEC6006A0E71 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21A1C10A1DBFAEC6006A0E71 /* Main.storyboard */; };
 		21A1C10E1DBFAEC6006A0E71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21A1C10D1DBFAEC6006A0E71 /* Assets.xcassets */; };
 		21A1C1111DBFAEC6006A0E71 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21A1C10F1DBFAEC6006A0E71 /* LaunchScreen.storyboard */; };
+		21A1C1191DBFAF9B006A0E71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C1181DBFAF9B006A0E71 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		21A1C1031DBFAEC6006A0E71 /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		21A1C1061DBFAEC6006A0E71 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		21A1C1081DBFAEC6006A0E71 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		21A1C10B1DBFAEC6006A0E71 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		21A1C10D1DBFAEC6006A0E71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		21A1C1101DBFAEC6006A0E71 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		21A1C1121DBFAEC6006A0E71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		21A1C1181DBFAF9B006A0E71 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,9 +50,7 @@
 		21A1C1051DBFAEC6006A0E71 /* Virtual Tourist */ = {
 			isa = PBXGroup;
 			children = (
-				21A1C1061DBFAEC6006A0E71 /* AppDelegate.swift */,
-				21A1C1081DBFAEC6006A0E71 /* ViewController.swift */,
-				21A1C10A1DBFAEC6006A0E71 /* Main.storyboard */,
+				21A1C1181DBFAF9B006A0E71 /* AppDelegate.swift */,
 				21A1C10D1DBFAEC6006A0E71 /* Assets.xcassets */,
 				21A1C10F1DBFAEC6006A0E71 /* LaunchScreen.storyboard */,
 				21A1C1121DBFAEC6006A0E71 /* Info.plist */,
@@ -97,6 +91,7 @@
 					21A1C1021DBFAEC6006A0E71 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 7B656Y9UYB;
+						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -126,7 +121,6 @@
 			files = (
 				21A1C1111DBFAEC6006A0E71 /* LaunchScreen.storyboard in Resources */,
 				21A1C10E1DBFAEC6006A0E71 /* Assets.xcassets in Resources */,
-				21A1C10C1DBFAEC6006A0E71 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,22 +131,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21A1C1091DBFAEC6006A0E71 /* ViewController.swift in Sources */,
-				21A1C1071DBFAEC6006A0E71 /* AppDelegate.swift in Sources */,
+				21A1C1191DBFAF9B006A0E71 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		21A1C10A1DBFAEC6006A0E71 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				21A1C10B1DBFAEC6006A0E71 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		21A1C10F1DBFAEC6006A0E71 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -261,11 +246,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 7B656Y9UYB;
 				INFOPLIST_FILE = "Virtual Tourist/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.hexaedre.Virtual-Tourist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -274,6 +261,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 7B656Y9UYB;
 				INFOPLIST_FILE = "Virtual Tourist/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
