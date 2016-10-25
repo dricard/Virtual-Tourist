@@ -11,6 +11,7 @@
 		21A1C1111DBFAEC6006A0E71 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21A1C10F1DBFAEC6006A0E71 /* LaunchScreen.storyboard */; };
 		21A1C1191DBFAF9B006A0E71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C1181DBFAF9B006A0E71 /* AppDelegate.swift */; };
 		21A1C11B1DBFAFD4006A0E71 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C11A1DBFAFD4006A0E71 /* CoreDataStack.swift */; };
+		21A1C11D1DBFAFFC006A0E71 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C11C1DBFAFFC006A0E71 /* MapViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		21A1C1121DBFAEC6006A0E71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		21A1C1181DBFAF9B006A0E71 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		21A1C11A1DBFAFD4006A0E71 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		21A1C11C1DBFAFFC006A0E71 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +54,7 @@
 		21A1C1051DBFAEC6006A0E71 /* Virtual Tourist */ = {
 			isa = PBXGroup;
 			children = (
+				21A1C11C1DBFAFFC006A0E71 /* MapViewController.swift */,
 				21A1C11A1DBFAFD4006A0E71 /* CoreDataStack.swift */,
 				21A1C1181DBFAF9B006A0E71 /* AppDelegate.swift */,
 				21A1C10D1DBFAEC6006A0E71 /* Assets.xcassets */,
@@ -135,6 +138,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				21A1C1191DBFAF9B006A0E71 /* AppDelegate.swift in Sources */,
+				21A1C11D1DBFAFFC006A0E71 /* MapViewController.swift in Sources */,
 				21A1C11B1DBFAFD4006A0E71 /* CoreDataStack.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
