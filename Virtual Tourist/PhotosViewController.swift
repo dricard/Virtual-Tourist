@@ -48,8 +48,39 @@ class PhotosViewController: UIViewController {
       collectionView.delegate = self
       collectionView.dataSource = self
       
+      if let pin = pin {
+         
+         if let photos = pin.photos {
+            if photos.count == 0 {
+               // no photos at this location, fetch new ones
+               print("photos is empty, fetch new photos")
+               fetchPhotos(pin: pin)
+            } else {
+               // there are photos in this location so display them
+               print("photos is not empty, display photos")
+               displayPhotosForLocation(pin: pin)
+            }
+         } else {
+            // pin.photos is nil so there are no photos: fetch photos
+            print("photos is nil, fetch photos")
+            fetchPhotos(pin: pin)
+         }
+      } else {
+         print("Pin is nil, something went wrong")
+      }
       
    }
+   
+   // MARK: - Photos methods
+   
+   func fetchPhotos(pin: Pin) {
+      
+   }
+   
+   func displayPhotosForLocation(pin: Pin) {
+      
+   }
+   
 }
 
 extension PhotosViewController: UICollectionViewDelegate {
@@ -79,20 +110,20 @@ extension PhotosViewController: UICollectionViewDataSource {
       // Create a cell
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
       
-      guard let photo = pin?.photos?[indexPath.item] as Photo else { return cell }
+//      guard let photo = pin?.photos?[indexPath.item] as Photo else { return cell }
       
       // Configure the cell
       
-      if let imagePath = photo.imagePath {
-         let imageURL = URL(string: imagePath)
-         if let imageData = try? Data(contentsOf: imageURL!) {
-            cell.imageView.image = UIImage(data: imageData)
-         } else {
-            print("Unable to get imageData from imageURL")
-         }
-      } else {
-         cell.imageView.image = UIImage(named: "cube")
-      }
+//      if let imagePath = photo.imagePath {
+//         let imageURL = URL(string: imagePath)
+//         if let imageData = try? Data(contentsOf: imageURL!) {
+//            cell.imageView.image = UIImage(data: imageData)
+//         } else {
+//            print("Unable to get imageData from imageURL")
+//         }
+//      } else {
+//         cell.imageView.image = UIImage(named: "cube")
+//      }
       
       return cell
    }
