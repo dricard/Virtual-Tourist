@@ -110,20 +110,22 @@ extension PhotosViewController: UICollectionViewDataSource {
       // Create a cell
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
       
-//      guard let photo = pin?.photos?[indexPath.item] as Photo else { return cell }
+      guard let pin = pin, let photos = pin.photos else { return cell }
+      
+      let photo = photos[indexPath.item] as Photo
       
       // Configure the cell
       
-//      if let imagePath = photo.imagePath {
-//         let imageURL = URL(string: imagePath)
-//         if let imageData = try? Data(contentsOf: imageURL!) {
-//            cell.imageView.image = UIImage(data: imageData)
-//         } else {
-//            print("Unable to get imageData from imageURL")
-//         }
-//      } else {
-//         cell.imageView.image = UIImage(named: "cube")
-//      }
+      if let imagePath = photo.imageURL {
+         let imageURL = URL(string: imagePath)
+         if let imageData = try? Data(contentsOf: imageURL!) {
+            cell.imageView.image = UIImage(data: imageData)
+         } else {
+            print("Unable to get imageData from imageURL")
+         }
+      } else {
+         cell.imageView.image = UIImage(named: "cube")
+      }
       
       return cell
    }
