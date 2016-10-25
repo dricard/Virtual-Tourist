@@ -15,6 +15,7 @@
 		21A1C11F1DBFB024006A0E71 /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C11E1DBFB024006A0E71 /* PhotosViewController.swift */; };
 		21A1C1211DBFB046006A0E71 /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C1201DBFB046006A0E71 /* Photo+CoreDataClass.swift */; };
 		21A1C1231DBFB07A006A0E71 /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C1221DBFB07A006A0E71 /* Photo+CoreDataProperties.swift */; };
+		21A1C1251DBFB0A8006A0E71 /* Pin+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C1241DBFB0A8006A0E71 /* Pin+CoreDataClass.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		21A1C11E1DBFB024006A0E71 /* PhotosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 		21A1C1201DBFB046006A0E71 /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		21A1C1221DBFB07A006A0E71 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		21A1C1241DBFB0A8006A0E71 /* Pin+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataClass.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 		21A1C1051DBFAEC6006A0E71 /* Virtual Tourist */ = {
 			isa = PBXGroup;
 			children = (
+				21A1C1241DBFB0A8006A0E71 /* Pin+CoreDataClass.swift */,
 				21A1C1221DBFB07A006A0E71 /* Photo+CoreDataProperties.swift */,
 				21A1C1201DBFB046006A0E71 /* Photo+CoreDataClass.swift */,
 				21A1C11E1DBFB024006A0E71 /* PhotosViewController.swift */,
@@ -148,6 +151,7 @@
 			files = (
 				21A1C1231DBFB07A006A0E71 /* Photo+CoreDataProperties.swift in Sources */,
 				21A1C1211DBFB046006A0E71 /* Photo+CoreDataClass.swift in Sources */,
+				21A1C1251DBFB0A8006A0E71 /* Pin+CoreDataClass.swift in Sources */,
 				21A1C1191DBFAF9B006A0E71 /* AppDelegate.swift in Sources */,
 				21A1C11F1DBFB024006A0E71 /* PhotosViewController.swift in Sources */,
 				21A1C11D1DBFAFFC006A0E71 /* MapViewController.swift in Sources */,
