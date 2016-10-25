@@ -78,7 +78,7 @@ class PhotosViewController: UIViewController {
    }
    
    func displayPhotosForLocation(pin: Pin) {
-      
+      collectionView.reloadData()
    }
    
 }
@@ -122,9 +122,10 @@ extension PhotosViewController: UICollectionViewDataSource {
             cell.imageView.image = UIImage(data: imageData)
          } else {
             print("Unable to get imageData from imageURL")
+            cell.imageView.image = UIImage(named: "logo_210")
          }
       } else {
-         cell.imageView.image = UIImage(named: "cube")
+         cell.imageView.image = UIImage(named: "logo_210")
       }
       
       return cell
