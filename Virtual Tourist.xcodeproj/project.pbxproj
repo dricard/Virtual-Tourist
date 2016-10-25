@@ -17,6 +17,7 @@
 		21A1C1231DBFB07A006A0E71 /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C1221DBFB07A006A0E71 /* Photo+CoreDataProperties.swift */; };
 		21A1C1251DBFB0A8006A0E71 /* Pin+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C1241DBFB0A8006A0E71 /* Pin+CoreDataClass.swift */; };
 		21A1C1271DBFB0CF006A0E71 /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C1261DBFB0CF006A0E71 /* Pin+CoreDataProperties.swift */; };
+		21A1C12A1DBFB0FA006A0E71 /* Virtual Tourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C1281DBFB0FA006A0E71 /* Virtual Tourist.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		21A1C1221DBFB07A006A0E71 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		21A1C1241DBFB0A8006A0E71 /* Pin+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataClass.swift"; sourceTree = "<group>"; };
 		21A1C1261DBFB0CF006A0E71 /* Pin+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		21A1C1291DBFB0FA006A0E71 /* Virtual Tourist.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Virtual Tourist.xcdatamodel"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 		21A1C1051DBFAEC6006A0E71 /* Virtual Tourist */ = {
 			isa = PBXGroup;
 			children = (
+				21A1C1281DBFB0FA006A0E71 /* Virtual Tourist.xcdatamodeld */,
 				21A1C1261DBFB0CF006A0E71 /* Pin+CoreDataProperties.swift */,
 				21A1C1241DBFB0A8006A0E71 /* Pin+CoreDataClass.swift */,
 				21A1C1221DBFB07A006A0E71 /* Photo+CoreDataProperties.swift */,
@@ -153,6 +156,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				21A1C1231DBFB07A006A0E71 /* Photo+CoreDataProperties.swift in Sources */,
+				21A1C12A1DBFB0FA006A0E71 /* Virtual Tourist.xcdatamodeld in Sources */,
 				21A1C1271DBFB0CF006A0E71 /* Pin+CoreDataProperties.swift in Sources */,
 				21A1C1211DBFB046006A0E71 /* Photo+CoreDataClass.swift in Sources */,
 				21A1C1251DBFB0A8006A0E71 /* Pin+CoreDataClass.swift in Sources */,
@@ -320,6 +324,19 @@
 			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		21A1C1281DBFB0FA006A0E71 /* Virtual Tourist.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				21A1C1291DBFB0FA006A0E71 /* Virtual Tourist.xcdatamodel */,
+			);
+			currentVersion = 21A1C1291DBFB0FA006A0E71 /* Virtual Tourist.xcdatamodel */;
+			path = "Virtual Tourist.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 21A1C0FB1DBFAEC6006A0E71 /* Project object */;
 }
