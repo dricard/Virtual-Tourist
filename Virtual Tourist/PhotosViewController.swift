@@ -59,7 +59,7 @@ class PhotosViewController: UIViewController {
       
       let idSort = NSSortDescriptor(key: #keyPath(Photo.id), ascending: true)
       fetchRequest.sortDescriptors = [idSort]
-      fetchRequest.predicate = NSPredicate(format: "pin == %@", #keyPath(Photo.pin))
+      fetchRequest.predicate = NSPredicate(format: "pin = %@", pin!)
       
       // 2. create the fetchedResultsController
       
@@ -123,21 +123,23 @@ class PhotosViewController: UIViewController {
                photo.title = photoDict[Flickr.Title] as! String?
                photo.imageURL = photoDict[Flickr.ImagePath] as! String?
                photo.pin = pin
+               print("Photo with title: \(photo.title) added")
             }
          }
          
          do {
             try self.managedContext.save()
+            print("Saving context was successful")
          } catch let error as NSError {
             print("Could not save: \(error), \(error.userInfo)")
          }
          
-//         self.displayPhotosForLocation(pin: pin)
+         self.displayPhotosForLocation(pin: pin)
       }
    }
    
    func displayPhotosForLocation(pin: Pin) {
-//      collectionView.reloadData()
+      collectionView.reloadData()
    }
    
 }
