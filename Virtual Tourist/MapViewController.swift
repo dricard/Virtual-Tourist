@@ -18,6 +18,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
    var pin: Pin?
    let longPressRec = UILongPressGestureRecognizer()
    var restoringRegion = false
+   var region: MKCoordinateRegion?
    
    // MARK: - Outlets
    
@@ -169,6 +170,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
       }
    }
    
+   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+      let controller = segue.destination as! PhotosViewController
+      controller.pin = pin
+      controller.managedContext = managedContext
+      controller.focusedRegion = region
+   }
+   
+   
    func presentPhotosViewController(pin: Pin, coordinate: CLLocationCoordinate2D) {
       
       // first get the region to pass to PhotosViewController
@@ -177,15 +186,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
       let lonDelta = mapView.region.span.longitudeDelta
       let latDelta = mapView.region.span.latitudeDelta / 3
       let span = MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: lonDelta)
-      let region = MKCoordinateRegion(center: center, span: span)
-
-      let controller = storyboard!.instantiateViewController(withIdentifier: "PhotosViewController") as! PhotosViewController
-      controller.pin = pin
-      controller.managedContext = managedContext
-      controller.focusedRegion = region
+      region = MKCoordinateRegion(center: center, span: span)
       
-      present(controller, animated: true, completion: nil)
-      
+      performSegue(withIdentifier: "PhotosView", sender: self)
    }
    
    // MARK: - MapView Delegates
