@@ -16,6 +16,8 @@ struct Flickr {
    static let PhotoSearchRadius = "2"
    static let Photos = "photos"
    static let Photo = "photo"
+   static let PerPage = "200"
+   
    
    // Dictionary keys
    static let Title = "title"

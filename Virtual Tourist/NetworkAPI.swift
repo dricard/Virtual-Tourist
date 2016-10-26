@@ -6,6 +6,7 @@
 //  Copyright © 2016 Hexaedre. All rights reserved.
 //
 
+import Foundation
 import UIKit
 import MapKit
 
@@ -28,7 +29,9 @@ class NetworkAPI: NSObject {
          "extras": "url_m",
          "nojsoncallback": "1",
          "api_key": APIKey.Flickr_API_KEY,
-         "radius": Flickr.PhotoSearchRadius
+         "radius": Flickr.PhotoSearchRadius,
+         "per_page": Flickr.PerPage,
+         "page": "\(arc4random_uniform(10))"
       ]
       
       // 2. Build URL
@@ -42,7 +45,7 @@ class NetworkAPI: NSObject {
       request.httpMethod = "GET"
       
       // 4. Make the request
-      let task = session.dataTask(with: request as URLRequest, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) in
+      let task: URLSessionDataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) in
          
          // Utility function
          func sendError(_ error: String, code: Int) {
@@ -92,7 +95,9 @@ class NetworkAPI: NSObject {
          completionHandlerForNetworkRequest(photoArray, true, nil)
          
          
-      }).resume()
+      })
+         
+      task.resume()
       
    }
 }
