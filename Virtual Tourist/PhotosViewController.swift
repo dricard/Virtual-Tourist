@@ -87,7 +87,6 @@ class PhotosViewController: UIViewController {
          } else {
             // there are photos in this location so display them
             print("photos is not empty, display photos")
-            displayPhotosForLocation(pin: pin!)
          }
       } else {
          // photos is nil so there are no photos: fetch photos
