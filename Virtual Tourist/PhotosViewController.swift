@@ -96,6 +96,12 @@ class PhotosViewController: UIViewController {
       }
 
    }
+   
+   override func viewWillAppear(_ animated: Bool) {
+      super.viewWillAppear(animated)
+      
+      navigationController?.navigationBar.isHidden = false
+   }
 
    // MARK: - Photos methods
 
@@ -123,25 +129,18 @@ class PhotosViewController: UIViewController {
                photo.title = photoDict[Flickr.Title] as! String?
                photo.imageURL = photoDict[Flickr.ImagePath] as! String?
                photo.pin = pin
-               print("Photo with title: \(photo.title) added")
             }
          }
          
          do {
             try self.managedContext.save()
-            print("Saving context was successful")
          } catch let error as NSError {
             print("Could not save: \(error), \(error.userInfo)")
          }
          
-         self.displayPhotosForLocation(pin: pin)
       }
    }
-   
-   func displayPhotosForLocation(pin: Pin) {
-      collectionView.reloadData()
-   }
-   
+      
 }
 
 extension PhotosViewController: UICollectionViewDelegate {
