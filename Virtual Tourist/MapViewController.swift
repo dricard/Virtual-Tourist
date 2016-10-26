@@ -239,7 +239,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             }
          } else {
             // there are no pins in CoreData, might be the first launch
-            print("Could not find a matching pin for this latitude: \(coordinate.latitude)")
+            print("Could not find a matching pin for this latitude: \(coordinate.latitude) and longitude: \(coordinate.longitude)")
          }
       } catch let error as NSError {
          print("Fetch error: \(error), \(error.userInfo)")
