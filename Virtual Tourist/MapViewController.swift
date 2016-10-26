@@ -169,8 +169,16 @@ class MapViewController: UIViewController, MKMapViewDelegate {
       }
    }
    
-   func presentPhotosViewController(pin: Pin, region: MKCoordinateRegion) {
+   func presentPhotosViewController(pin: Pin, coordinate: CLLocationCoordinate2D) {
       
+      // first get the region to pass to PhotosViewController
+      
+      let center = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
+      let lonDelta = mapView.region.span.longitudeDelta
+      let latDelta = mapView.region.span.latitudeDelta / 3
+      let span = MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: lonDelta)
+      let region = MKCoordinateRegion(center: center, span: span)
+
       let controller = storyboard!.instantiateViewController(withIdentifier: "PhotosViewController") as! PhotosViewController
       controller.pin = pin
       controller.managedContext = managedContext
@@ -223,19 +231,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             if results.count > 1 {
                // more than one possibility, so we refine the search?
                // TODO: - Resolve possibility of more than one matched pin
+               // For now just use the first one
+               pin = results.first
+               
+               // present the photos view controller
+               presentPhotosViewController(pin: pin!, coordinate: coordinate)
             } else {
                // there is only one match, so this is our pin
                pin = results.first
                
-               // now get the region to pass to PhotosViewController
-               
-               let center = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
-               let lonDelta = mapView.region.span.longitudeDelta
-               let latDelta = mapView.region.span.latitudeDelta / 3
-               let span = MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: lonDelta)
-               let focusRegion = MKCoordinateRegion(center: center, span: span)
                // present the photos view controller
-               presentPhotosViewController(pin: pin!, region: focusRegion)
+               presentPhotosViewController(pin: pin!, coordinate: coordinate)
             }
          } else {
             // there are no pins in CoreData, might be the first launch
