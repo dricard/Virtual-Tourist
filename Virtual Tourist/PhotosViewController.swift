@@ -16,6 +16,10 @@ class PhotosViewController: UIViewController {
    var pin: Pin?
    var managedContext: NSManagedObjectContext!
    var focusedRegion: MKCoordinateRegion?
+   var fetchedResultsController: NSFetchedResultsController<Photo>!
+   
+   var insertedCache: [IndexPath]!
+   var deletedCache: [IndexPath]!
    
    // MARK: - Outlets
    
@@ -48,31 +52,53 @@ class PhotosViewController: UIViewController {
       collectionView.delegate = self
       collectionView.dataSource = self
       
-      if let pin = pin {
+      // set-up the fetchedResultController
+      
+      // 1. set the fetchRequest
+      let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
+      
+      let idSort = NSSortDescriptor(key: #keyPath(Photo.id), ascending: true)
+      fetchRequest.sortDescriptors = [idSort]
+      fetchRequest.predicate = NSPredicate(format: "pin == %@", #keyPath(Photo.pin))
+      
+      // 2. create the fetchedResultsController
+      
+      fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: managedContext, sectionNameKeyPath: nil, cacheName: nil)
+      
+      // 3. set the delegate
+      
+      fetchedResultsController.delegate = self
+      
+      // 4. perform the fetch
+      
+      do {
+         try fetchedResultsController.performFetch()
+      } catch let error as NSError {
+         print("Could not fetch \(error), \(error.userInfo)")
+      }
+
+      
+      if let photos = fetchedResultsController.fetchedObjects {
          
-         if let photos = pin.photos {
-            if photos.count == 0 {
-               // no photos at this location, fetch new ones
-               print("photos is empty, fetch new photos")
-               fetchPhotos(pin: pin)
-            } else {
-               // there are photos in this location so display them
-               print("photos is not empty, display photos")
-               displayPhotosForLocation(pin: pin)
-            }
+         if photos.count == 0 {
+            // no photos at this location, fetch new ones
+            print("photos is empty, fetch new photos")
+            fetchPhotos(pin: pin!)
          } else {
-            // pin.photos is nil so there are no photos: fetch photos
-            print("photos is nil, fetch photos")
-            fetchPhotos(pin: pin)
+            // there are photos in this location so display them
+            print("photos is not empty, display photos")
+            displayPhotosForLocation(pin: pin!)
          }
       } else {
-         print("Pin is nil, something went wrong")
+         // photos is nil so there are no photos: fetch photos
+         print("photos is nil, fetch photos")
+         fetchPhotos(pin: pin!)
       }
-      
+
    }
-   
+
    // MARK: - Photos methods
-   
+
    func fetchPhotos(pin: Pin) {
       NetworkAPI.sendRequest(pin) { (photosDict, success, error) in
          
@@ -106,12 +132,12 @@ class PhotosViewController: UIViewController {
             print("Could not save: \(error), \(error.userInfo)")
          }
          
-         self.displayPhotosForLocation(pin: pin)
+//         self.displayPhotosForLocation(pin: pin)
       }
    }
    
    func displayPhotosForLocation(pin: Pin) {
-      collectionView.reloadData()
+//      collectionView.reloadData()
    }
    
 }
@@ -120,34 +146,14 @@ extension PhotosViewController: UICollectionViewDelegate {
    
 }
 
-extension PhotosViewController: UICollectionViewDataSource {
+// MARK: - Internals
+extension PhotosViewController {
    
-   // MARK: - CollectionViewController subclass required methods
-   
-   func numberOfSections(in collectionView: UICollectionView) -> Int {
-      //      let sections = self.frc?.sections?.count ?? 0
-      //      return sections
-      return 1
-   }
-   
-   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+   func configure(_ cell: UICollectionViewCell, for indexPath: IndexPath) {
       
-      guard let photos = pin?.photos else { return 1 }
+      guard let cell = cell as? PhotoCell else { return }
       
-      return photos.count
-      
-   }
-   
-   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-      
-      // Create a cell
-      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
-      
-      guard let pin = pin, let photos = pin.photos else { return cell }
-            
-      let photo = photos[indexPath.item]
-      
-      // Configure the cell
+      let photo = fetchedResultsController.object(at: indexPath)
       
       if let imagePath = photo.imageURL {
          let imageURL = URL(string: imagePath)
@@ -160,10 +166,68 @@ extension PhotosViewController: UICollectionViewDataSource {
       } else {
          cell.imageView.image = UIImage(named: "logo_210")
       }
+
+   }
+}
+
+extension PhotosViewController: UICollectionViewDataSource {
+   
+   // MARK: - CollectionViewController subclass required methods
+   
+   func numberOfSections(in collectionView: UICollectionView) -> Int {
+      
+      guard let sections = fetchedResultsController.sections else { return 0 }
+      
+      return sections.count
+   }
+   
+   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+      
+      guard let sectionInfo = fetchedResultsController.sections?[section] else { return 0 }
+      
+      return sectionInfo.numberOfObjects
+      
+   }
+   
+   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+      
+      // Create a cell
+      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
+      
+      configure(cell, for: indexPath)
       
       return cell
    }
    
 }
 
-
+// MARK: - NSFetchedResultsControllerDelegate
+extension PhotosViewController: NSFetchedResultsControllerDelegate {
+   
+   func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+      insertedCache = [IndexPath]()
+      deletedCache = [IndexPath]()
+   }
+   
+   func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+      
+      switch type {
+      case .insert:
+         insertedCache.append(newIndexPath!)
+      case .delete:
+         deletedCache.append(indexPath!)
+      case .move:
+         deletedCache.append(indexPath!)
+         insertedCache.append(newIndexPath!)
+      default:
+         break
+      }
+   }
+   
+   func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+      collectionView.performBatchUpdates({ 
+         self.collectionView.insertItems(at: self.insertedCache)
+         self.collectionView.deleteItems(at: self.deletedCache)
+         }, completion: nil)
+   }
+}
