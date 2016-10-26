@@ -225,28 +225,36 @@ class MapViewController: UIViewController, MKMapViewDelegate {
       let precision = 0.0001
       pinFetch.predicate = NSPredicate(format: "(%K BETWEEN {\(coordinate.latitude - precision), \(coordinate.latitude + precision) }) AND (%K BETWEEN {\(coordinate.longitude - precision), \(coordinate.longitude + precision) })", #keyPath(Pin.lat), #keyPath(Pin.lon))
       
-      do {
-         let results = try managedContext.fetch(pinFetch)
-         if results.count > 0 {
-            if results.count > 1 {
+      // create the asynchronous request
+      let asyncFetchRequest: NSAsynchronousFetchRequest<Pin> = NSAsynchronousFetchRequest<Pin>(fetchRequest: pinFetch) { [unowned self] (result: NSAsynchronousFetchResult) in
+         
+         guard let pins: [Pin] = result.finalResult else { return }
+  
+         if pins.count > 0 {
+            if pins.count > 1 {
                // more than one possibility, so we refine the search?
                // TODO: - Resolve possibility of more than one matched pin
                // For now just use the first one
-               pin = results.first
+               self.pin = pins.first
                
                // present the photos view controller
-               presentPhotosViewController(pin: pin!, coordinate: coordinate)
+               self.presentPhotosViewController(pin: self.pin!, coordinate: coordinate)
             } else {
                // there is only one match, so this is our pin
-               pin = results.first
+               self.pin = pins.first
                
                // present the photos view controller
-               presentPhotosViewController(pin: pin!, coordinate: coordinate)
+               self.presentPhotosViewController(pin: self.pin!, coordinate: coordinate)
             }
          } else {
             // there are no pins in CoreData, might be the first launch
             print("Could not find a matching pin for this latitude: \(coordinate.latitude) and longitude: \(coordinate.longitude)")
          }
+         
+      }
+      
+      do {
+         try managedContext.execute(asyncFetchRequest)
       } catch let error as NSError {
          print("Fetch error: \(error), \(error.userInfo)")
       }
