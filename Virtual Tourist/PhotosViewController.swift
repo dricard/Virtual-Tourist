@@ -21,6 +21,9 @@ class PhotosViewController: UIViewController {
    var insertedCache: [IndexPath]!
    var deletedCache: [IndexPath]!
    
+   // minimum space between cells
+   let space: CGFloat = 3.0
+   
    // MARK: - Outlets
    
    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
@@ -100,6 +103,8 @@ class PhotosViewController: UIViewController {
       super.viewWillAppear(animated)
       
       navigationController?.navigationBar.isHidden = false
+      
+      setFlowLayout()
    }
 
    // MARK: - Photos methods
@@ -149,6 +154,32 @@ extension PhotosViewController: UICollectionViewDelegate {
 // MARK: - Internals
 extension PhotosViewController {
    
+   override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
+      setFlowLayout()
+   }
+   
+   func setFlowLayout() {
+      
+      let screenWidth = view.frame.width
+      let screenHeight = view.frame.height
+      
+      // space around pictures
+      
+      var dimensionX, dimensionY: CGFloat
+      
+      if screenHeight > screenWidth {
+         dimensionX = (screenWidth - (1 * space)) / 2.0
+         dimensionY = (screenHeight - (5 * space)) / 4.0
+      } else {
+         dimensionY = (screenHeight - (2 * space)) / 2.0
+         dimensionX = (screenWidth - (5 * space)) / 4.0
+      }
+      
+//      flowLayout.minimumLineSpacing = space
+//      flowLayout.minimumInteritemSpacing = space
+//      flowLayout.itemSize = CGSize(width: dimensionX, height: dimensionY)
+   }
+   
    func configure(_ cell: UICollectionViewCell, for indexPath: IndexPath) {
       
       guard let cell = cell as? PhotoCell else { return }
@@ -166,13 +197,15 @@ extension PhotosViewController {
       } else {
          cell.imageView.image = UIImage(named: "logo_210")
       }
+      
+      cell.imageView.contentMode = .scaleAspectFit
 
    }
 }
 
 extension PhotosViewController: UICollectionViewDataSource {
    
-   // MARK: - CollectionViewController subclass required methods
+   // MARK: - CollectionView Datasource methods
    
    func numberOfSections(in collectionView: UICollectionView) -> Int {
       
@@ -198,11 +231,13 @@ extension PhotosViewController: UICollectionViewDataSource {
       
       return cell
    }
-   
+      
 }
 
 // MARK: - NSFetchedResultsControllerDelegate
 extension PhotosViewController: NSFetchedResultsControllerDelegate {
+   
+   
    
    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
       insertedCache = [IndexPath]()

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Flickr {
+enum Flickr {
    
    // API related
    static let FlickrBaseURL = "https://api.flickr.com/services/rest/"
