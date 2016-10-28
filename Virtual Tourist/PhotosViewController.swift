@@ -184,10 +184,10 @@ extension PhotosViewController {
       
       guard let cell = cell as? PhotoCell else { return }
       
+      var image: UIImage
+
       // get a reference to the object for the cell
       let photo = fetchedResultsController.object(at: indexPath)
-      
-      var image: UIImage
       
       // check to see if the image is already in core data
       if photo.image != nil {
@@ -223,14 +223,18 @@ extension PhotosViewController: UICollectionViewDataSource {
    
    func numberOfSections(in collectionView: UICollectionView) -> Int {
       
-      guard let sections = fetchedResultsController.sections else { return 0 }
+      guard let sections = fetchedResultsController.sections else { return 1 }
       
       return sections.count
    }
    
    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
       
-      guard let sectionInfo = fetchedResultsController.sections?[section] else { return 0 }
+      guard let sectionInfo = fetchedResultsController.sections?[section] else {
+         // we don't have photos yet, so fill a screen with placeholder images
+         // while we wait
+         return 6
+      }
       
       return sectionInfo.numberOfObjects
       
