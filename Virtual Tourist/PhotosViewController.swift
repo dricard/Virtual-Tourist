@@ -184,22 +184,36 @@ extension PhotosViewController {
       
       guard let cell = cell as? PhotoCell else { return }
       
+      // get a reference to the object for the cell
       let photo = fetchedResultsController.object(at: indexPath)
       
-      if let imagePath = photo.imageURL {
-         let imageURL = URL(string: imagePath)
-         if let imageData = try? Data(contentsOf: imageURL!) {
-            cell.imageView.image = UIImage(data: imageData)
-         } else {
-            print("Unable to get imageData from imageURL")
-            cell.imageView.image = UIImage(named: "logo_210")
-         }
+      var image: UIImage
+      
+      // check to see if the image is already in core data
+      if photo.image != nil {
+         // image exists, use it
+         image = UIImage(data: photo.image! as Data)!
       } else {
-         cell.imageView.image = UIImage(named: "logo_210")
+         // image has not been downloaded, try to download it
+         if let imagePath = photo.imageURL {
+            let imageURL = URL(string: imagePath)
+            if let imageData = try? Data(contentsOf: imageURL!) {
+               image = UIImage(data: imageData)!
+               let imageData = UIImagePNGRepresentation(image)
+               photo.image = NSData(data: imageData!)
+
+            } else {
+               print("Unable to get imageData from imageURL")
+               image = UIImage(named: "logo_210")!
+            }
+         } else {
+            image = UIImage(named: "logo_210")!
+         }
       }
       
+      cell.imageView.image = image
       cell.imageView.contentMode = .scaleAspectFit
-
+      
    }
 }
 
