@@ -15,11 +15,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
    // MARK: - Properties
    
    var managedContext: NSManagedObjectContext!
-   var pin: Pin?
    let longPressRec = UILongPressGestureRecognizer()
    var restoringRegion = false
    var region: MKCoordinateRegion?
+   var pin: Pin?
    
+   var pins: [Pin] = []
+   var asyncFetchRequest: NSAsynchronousFetchRequest<Pin>!
+
    // MARK: - Outlets
    
    @IBOutlet weak var mapView: MKMapView!
@@ -45,15 +48,20 @@ class MapViewController: UIViewController, MKMapViewDelegate {
       // check CoreData for available Pins
       let pinFetch: NSFetchRequest<Pin> = Pin.fetchRequest()
       
-      do {
-         let results = try managedContext.fetch(pinFetch)
-         if results.count > 0 {
-            // we found pins, display them as annotations
-            displayPinsOnMap(pins: results)
-         } else {
-            // there are no pins in CoreData, might be the first launch
-            displayOnBoarding()
+      asyncFetchRequest = NSAsynchronousFetchRequest<Pin>(fetchRequest: pinFetch) { [unowned self] (result: NSAsynchronousFetchResult) in
+         
+         guard let pins = result.finalResult else {
+            // no pins in CoreData, display onboarding experience
+            self.displayOnBoarding()
+            return
          }
+         
+         self.pins = pins
+         self.displayPinsOnMap(pins: pins)
+      }
+      
+      do {
+         try managedContext.execute(asyncFetchRequest)
       } catch let error as NSError {
          print("Fetch error: \(error), \(error.userInfo)")
       }
@@ -121,7 +129,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
    // MARK: - Display methods
    
    func displayPinsOnMap(pins: [Pin]) {
-
+      
       for pin in pins {
          var locationCoordinate = CLLocationCoordinate2D()
          locationCoordinate.latitude = pin.lat
@@ -155,9 +163,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
          annotation.coordinate = locationCoordinate
          
          // now create the pin
-         pin = Pin(context: managedContext)
-         pin?.lat = locationCoordinate.latitude
-         pin?.lon = locationCoordinate.longitude
+         let pin = Pin(context: managedContext)
+         pin.lat = locationCoordinate.latitude
+         pin.lon = locationCoordinate.longitude
          // save the context
          do {
             try managedContext.save()
