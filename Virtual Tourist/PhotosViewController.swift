@@ -59,7 +59,8 @@ class PhotosViewController: UIViewController {
       
       // 1. set the fetchRequest
       let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
-      
+      fetchRequest.fetchBatchSize = 20
+
       let idSort = NSSortDescriptor(key: #keyPath(Photo.id), ascending: true)
       fetchRequest.sortDescriptors = [idSort]
       fetchRequest.predicate = NSPredicate(format: "pin = %@", pin!)
@@ -192,15 +193,15 @@ extension PhotosViewController {
       // check to see if the image is already in core data
       if photo.image != nil {
          // image exists, use it
-         image = UIImage(data: photo.image! as Data)!
+         image = UIImage(data: photo.image!)!
       } else {
          // image has not been downloaded, try to download it
          if let imagePath = photo.imageURL {
             let imageURL = URL(string: imagePath)
-            if let imageData = try? Data(contentsOf: imageURL!) {
-               image = UIImage(data: imageData)!
+            if let urlData = try? Data(contentsOf: imageURL!) {
+               image = UIImage(data: urlData)!
                let imageData = UIImagePNGRepresentation(image)
-               photo.image = NSData(data: imageData!)
+               photo.image = imageData
 
             } else {
                print("Unable to get imageData from imageURL")
