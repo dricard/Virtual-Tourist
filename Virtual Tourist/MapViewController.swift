@@ -212,6 +212,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
          pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
          pinView!.canShowCallout = false
          pinView!.pinTintColor = UIColor.black
+         pinView!.animatesDrop = true
       }
       return pinView
    }
