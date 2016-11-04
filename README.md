@@ -9,7 +9,7 @@ It showcases how to use **CoreData** to persist data. It also uses **web APIs** 
 
 #### Documentation
 
-The code is well documented. More information can be found on the [project's page](http://hexaedre.com/projects/virtual-tourist/).
+The code is well documented. More information can be found on the [project's page](http://hexaedre.com/apps/virtual-tourist/).
 
 #### Install
 
