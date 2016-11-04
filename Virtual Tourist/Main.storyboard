@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="yJV-iG-GEP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="yJV-iG-GEP">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -20,7 +23,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="dOx-Pw-0lv"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="dOx-Pw-0lv">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -52,14 +57,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="g7m-9i-N4N">
-                                <frame key="frameInset" width="1000" height="1000"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="g7m-9i-N4N">
+                                <rect key="frame" x="0.0" y="64" width="375" height="160"/>
                                 <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="160" id="IBl-tF-PLO"/>
                                 </constraints>
                             </mapView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="BuX-fd-fzx">
+                                <rect key="frame" x="0.0" y="224" width="375" height="399"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="yyd-Lf-ig0">
@@ -76,7 +82,9 @@
                                             <rect key="frame" x="0.0" y="0.0" width="140" height="107"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="n9f-Be-jOw"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="n9f-Be-jOw">
+                                                    <rect key="frame" x="0.0" y="0.0" width="140" height="107"/>
+                                                </imageView>
                                             </subviews>
                                         </view>
                                         <constraints>
@@ -91,19 +99,38 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t1u-y5-4Lp">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="P4T-Xz-t9M"/>
+                                </constraints>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="CWY-c6-qps"/>
+                                    <barButtonItem title="Item" id="dPT-Pn-JAN">
+                                        <connections>
+                                            <action selector="buttonTapped:" destination="JcE-EB-1H1" id="TcE-2b-VdO"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="CUe-VM-MIF"/>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="g7m-9i-N4N" firstAttribute="top" secondItem="h8N-cJ-sb1" secondAttribute="bottom" identifier="map_top" id="Asd-zQ-I6u"/>
+                            <constraint firstItem="t1u-y5-4Lp" firstAttribute="leading" secondItem="f9Z-Tq-7gJ" secondAttribute="leading" id="M3D-Ot-W4Z"/>
+                            <constraint firstItem="t1u-y5-4Lp" firstAttribute="top" secondItem="BuX-fd-fzx" secondAttribute="bottom" id="MXJ-gz-WbW"/>
+                            <constraint firstItem="pBg-ep-eoS" firstAttribute="top" secondItem="t1u-y5-4Lp" secondAttribute="bottom" id="W7g-CV-cHo"/>
                             <constraint firstAttribute="trailing" secondItem="g7m-9i-N4N" secondAttribute="trailing" identifier="map_trailing" id="Wjg-tK-24t"/>
                             <constraint firstItem="BuX-fd-fzx" firstAttribute="top" secondItem="h8N-cJ-sb1" secondAttribute="bottom" constant="160" identifier="col_top" id="eqa-0E-DVb"/>
                             <constraint firstItem="BuX-fd-fzx" firstAttribute="leading" secondItem="f9Z-Tq-7gJ" secondAttribute="leading" identifier="col_leading" id="hbH-Xp-NNY"/>
-                            <constraint firstItem="BuX-fd-fzx" firstAttribute="bottom" secondItem="pBg-ep-eoS" secondAttribute="top" identifier="col_bottom" id="ppC-QS-Pla"/>
+                            <constraint firstAttribute="trailing" secondItem="t1u-y5-4Lp" secondAttribute="trailing" id="i5c-mq-hd8"/>
                             <constraint firstItem="g7m-9i-N4N" firstAttribute="leading" secondItem="f9Z-Tq-7gJ" secondAttribute="leading" identifier="map_leading" id="tWE-2e-fv7"/>
                             <constraint firstAttribute="trailing" secondItem="BuX-fd-fzx" secondAttribute="trailing" identifier="col_trailing" id="w9U-d4-bsE"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="button" destination="dPT-Pn-JAN" id="ENb-US-7rv"/>
                         <outlet property="collectionView" destination="BuX-fd-fzx" id="lcl-3O-RQm"/>
                         <outlet property="flowLayout" destination="BuX-fd-fzx" id="iLo-1I-OB3"/>
                         <outlet property="mapView" destination="g7m-9i-N4N" id="r2D-gF-Ulb"/>

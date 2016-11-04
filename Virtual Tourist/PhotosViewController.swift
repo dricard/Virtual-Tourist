@@ -30,6 +30,17 @@ class PhotosViewController: UIViewController {
    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
    @IBOutlet weak var collectionView: UICollectionView!
    @IBOutlet weak var mapView: MKMapView!
+   @IBOutlet weak var button: UIBarButtonItem!
+   @IBAction func buttonTapped(_ sender: Any) {
+      
+      if selectedCache.isEmpty {
+         // Button is to delete all photos and load new ones
+         // deleteAllPhotos()
+      } else {
+         // Button is to delete selected photos
+//         deleteSelectedPhotos()
+      }
+   }
    
    // MARK: - Life cycle
    
@@ -106,6 +117,8 @@ class PhotosViewController: UIViewController {
          print("photos is nil, fetch photos")
          fetchPhotos(pin: pin!)
       }
+      
+      configureButton()
 
    }
    
@@ -206,7 +219,7 @@ extension PhotosViewController: UICollectionViewDelegate {
       configure(cell, for: indexPath)
       
       // update interface
-      
+      configureButton()
    }
    
 }
@@ -290,6 +303,18 @@ extension PhotosViewController {
       }
       
    }
+   
+   func configureButton() {
+      if selectedCache.isEmpty {
+         // No photos selected, so option is to remove all photos
+         button.title = "Remove all photos"
+      } else {
+         // Some photos are selected, so option is to remove those
+         button.title = "Remove selected photos"
+      }
+   }
+   
+   
 }
 
 extension PhotosViewController: UICollectionViewDataSource {
