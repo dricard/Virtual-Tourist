@@ -50,6 +50,18 @@ class PhotosViewController: UIViewController {
       
       mapView.addAnnotation(annotation)
       
+      // Lay out the collection view so that cells take up 1/3 of the width,
+      // with no space in between.
+      let layout : UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+      layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+      layout.minimumLineSpacing = 0
+      layout.minimumInteritemSpacing = 0
+      
+      let width = floor(view.frame.width/3)
+      layout.itemSize = CGSize(width: width, height: width)
+      print(layout.itemSize)
+      collectionView.collectionViewLayout = layout
+
       // set delegates for the collectionView
       
       collectionView.delegate = self
@@ -75,11 +87,7 @@ class PhotosViewController: UIViewController {
       
       // 4. perform the fetch
       
-      do {
-         try fetchedResultsController.performFetch()
-      } catch let error as NSError {
-         print("Could not fetch \(error), \(error.userInfo)")
-      }
+      doFetch()
 
       
       if let photos = fetchedResultsController.fetchedObjects {
@@ -105,14 +113,21 @@ class PhotosViewController: UIViewController {
       
       navigationController?.navigationBar.isHidden = false
       
-      setFlowLayout()
+//      setFlowLayout()
+      
+      print("In viewWillAppear")
+      
+//      collectionView.reloadData()
+
    }
 
    // MARK: - Photos methods
 
    func fetchPhotos(pin: Pin) {
+      print("Sending fetch photo request to Flickr")
       NetworkAPI.sendRequest(pin) { (photosDict, success, error) in
          
+         print("returned from fetch photo request to Flickr")
          // GUARD: was there an error?
          guard error == nil else {
             print("Network request returned with error: \(error), \(error?.userInfo)")
@@ -126,24 +141,49 @@ class PhotosViewController: UIViewController {
          }
          
          // Process the photos dictionary
-         
-         if let photosDict = photosDict {
-            for photoDict in photosDict {
-               
-               let photo = Photo(context: self.managedContext)
-               photo.title = photoDict[Flickr.Title] as! String?
-               photo.imageURL = photoDict[Flickr.ImagePath] as! String?
-               photo.pin = pin
+         print("sending dispath global to process photos returned from flickr")
+         DispatchQueue.global(qos: .userInitiated).async {
+            print("in dispath global")
+            if let photosDict = photosDict {
+               for photoDict in photosDict {
+                  
+                  // Here we download all the photos' URL and title,
+                  // but not the actual photos, this is done in the cellForItemAtIndexpath method
+                  // as each photo is required (and if needed)
+                  let photo = Photo(context: self.managedContext)
+                  photo.title = photoDict[Flickr.Title] as? String
+                  photo.id = photoDict[Flickr.ID] as? String
+                  photo.imageURL = photoDict[Flickr.ImagePath] as? String
+                  photo.pin = pin
+               }
             }
+            
+            do {
+               try self.managedContext.save()
+            } catch let error as NSError {
+               print("Could not save: \(error), \(error.userInfo)")
+            }
+            print("done executing dispatch global, save context was successful unless printed otherwise")
+
          }
          
-         do {
-            try self.managedContext.save()
-         } catch let error as NSError {
-            print("Could not save: \(error), \(error.userInfo)")
+         DispatchQueue.main.async {
+            print("executing reFetch and reload")
+            self.doFetch()
+            self.collectionView.reloadData()
          }
          
       }
+   }
+   
+   func doFetch() {
+      print("executing fetch RC")
+      do {
+         try fetchedResultsController.performFetch()
+      } catch let error as NSError {
+         print("Could not fetch \(error), \(error.userInfo)")
+      }
+      
    }
       
 }
@@ -156,7 +196,7 @@ extension PhotosViewController: UICollectionViewDelegate {
 extension PhotosViewController {
    
    override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
-      setFlowLayout()
+//      setFlowLayout()
    }
    
    func setFlowLayout() {
@@ -189,31 +229,37 @@ extension PhotosViewController {
 
       // get a reference to the object for the cell
       let photo = fetchedResultsController.object(at: indexPath)
-      
+      print("configuring cell for photo: \(photo.id!)")
       // check to see if the image is already in core data
       if photo.image != nil {
          // image exists, use it
          image = UIImage(data: photo.image!)!
+         print("Photo \(photo.id!) image exist")
       } else {
          // image has not been downloaded, try to download it
-         if let imagePath = photo.imageURL {
+         print("Photo \(photo.id!) image doesn NOT exist -> downloading")
+        image = UIImage(named: "logo_210")!
+        if let imagePath = photo.imageURL {
             let imageURL = URL(string: imagePath)
-            if let urlData = try? Data(contentsOf: imageURL!) {
-               image = UIImage(data: urlData)!
-               let imageData = UIImagePNGRepresentation(image)
-               photo.image = imageData
+               if let urlData = try? Data(contentsOf: imageURL!) {
+                  print("Photo \(photo.id!) image downloaded successfully")
 
-            } else {
-               print("Unable to get imageData from imageURL")
-               image = UIImage(named: "logo_210")!
-            }
+                  image = UIImage(data: urlData)!
+                  let imageData = UIImagePNGRepresentation(image)
+                  photo.image = imageData
+                  
+               } else {
+                  print("Unable to get imageData from imageURL")
+                  image = UIImage(named: "logo_210")!
+               }
+
          } else {
             image = UIImage(named: "logo_210")!
          }
       }
       
       cell.imageView.image = image
-      cell.imageView.contentMode = .scaleAspectFit
+      cell.imageView.contentMode = .scaleAspectFill
       
    }
 }
@@ -279,9 +325,13 @@ extension PhotosViewController: NSFetchedResultsControllerDelegate {
    }
    
    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-      collectionView.performBatchUpdates({ 
-         self.collectionView.insertItems(at: self.insertedCache)
-         self.collectionView.deleteItems(at: self.deletedCache)
+      collectionView.performBatchUpdates({
+         for indexPath in self.insertedCache {
+            self.collectionView.insertItems(at: [indexPath])
+         }
+         for indexPath in self.deletedCache {
+            self.collectionView.deleteItems(at: [indexPath])
+         }
          }, completion: nil)
    }
 }
