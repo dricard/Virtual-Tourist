@@ -248,6 +248,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                // TODO: - Resolve possibility of more than one matched pin
                // For now just use the first one
                self.pin = pins.first
+               // print data to fine tune precision
+               print("More than one pin returned from fetc: \(pins.count)")
                
                // present the photos view controller
                self.presentPhotosViewController(pin: self.pin!, coordinate: coordinate)
