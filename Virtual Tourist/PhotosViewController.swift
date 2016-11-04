@@ -38,7 +38,7 @@ class PhotosViewController: UIViewController {
          // deleteAllPhotos()
       } else {
          // Button is to delete selected photos
-//         deleteSelectedPhotos()
+         deleteSelectedPhotos()
       }
    }
    
@@ -198,6 +198,32 @@ class PhotosViewController: UIViewController {
          print("Could not fetch \(error), \(error.userInfo)")
       }
       
+   }
+   
+   func deleteSelectedPhotos() {
+      
+      var photosToDelete = [Photo]()
+      
+      // get the list of Photos to delete
+      for indexPath in selectedCache {
+         photosToDelete.append(fetchedResultsController.object(at: indexPath))
+      }
+      
+      // remove each photo from the managed context
+      for photo in photosToDelete {
+         managedContext.delete(photo)
+      }
+      
+      // reset the selection of photos
+      selectedCache.removeAll()
+      
+      // save the context
+      do {
+         try managedContext.save()
+      } catch let error as NSError {
+         print("Could not save context \(error), \(error.userInfo)")
+      }
+
    }
       
 }
