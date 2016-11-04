@@ -20,6 +20,7 @@ class PhotosViewController: UIViewController {
    
    var insertedCache: [IndexPath]!
    var deletedCache: [IndexPath]!
+   var selectedCache = [IndexPath]()
    
    // minimum space between cells
    let space: CGFloat = 3.0
@@ -190,6 +191,24 @@ class PhotosViewController: UIViewController {
 
 extension PhotosViewController: UICollectionViewDelegate {
    
+   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+      
+      let cell = collectionView.cellForItem(at: indexPath) as! PhotoCell
+      
+      // Toggle selection of this cell
+      if let index = selectedCache.index(of: indexPath) {
+         selectedCache.remove(at: index)
+      } else {
+         selectedCache.append(indexPath)
+      }
+      
+      // reconfigure the cell
+      configure(cell, for: indexPath)
+      
+      // update interface
+      
+   }
+   
 }
 
 // MARK: - Internals
@@ -230,6 +249,8 @@ extension PhotosViewController {
       // get a reference to the object for the cell
       let photo = fetchedResultsController.object(at: indexPath)
       print("configuring cell for photo: \(photo.id!)")
+      // default value for image
+      image = UIImage(named: "logo_210")!
       // check to see if the image is already in core data
       if photo.image != nil {
          // image exists, use it
@@ -243,22 +264,30 @@ extension PhotosViewController {
                if let urlData = try? Data(contentsOf: imageURL!) {
                   print("Photo \(photo.id!) image downloaded successfully")
 
-                  image = UIImage(data: urlData)!
-                  let imageData = UIImagePNGRepresentation(image)
-                  photo.image = imageData
+                  let imageFromData = UIImage(data: urlData)
+                  if let image = imageFromData {
+                     let imageData = UIImagePNGRepresentation(image)
+                     photo.image = imageData
+                  } else {
+                     print("Unable to get image from urlData")
+                  }
                   
                } else {
                   print("Unable to get imageData from imageURL")
-                  image = UIImage(named: "logo_210")!
                }
 
-         } else {
-            image = UIImage(named: "logo_210")!
          }
       }
       
       cell.imageView.image = image
       cell.imageView.contentMode = .scaleAspectFill
+      
+      // apply 'selected' to cell if appropriate
+      if let _ = selectedCache.index(of: indexPath) {
+         cell.alpha = 0.5
+      } else {
+         cell.alpha = 1.0
+      }
       
    }
 }
