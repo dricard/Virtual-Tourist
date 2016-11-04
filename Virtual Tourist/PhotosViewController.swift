@@ -238,7 +238,6 @@ extension PhotosViewController {
       } else {
          // image has not been downloaded, try to download it
          print("Photo \(photo.id!) image doesn NOT exist -> downloading")
-        image = UIImage(named: "logo_210")!
         if let imagePath = photo.imageURL {
             let imageURL = URL(string: imagePath)
                if let urlData = try? Data(contentsOf: imageURL!) {
