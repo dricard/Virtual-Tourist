@@ -20,6 +20,7 @@ class PhotosViewController: UIViewController {
    
    var insertedCache: [IndexPath]!
    var deletedCache: [IndexPath]!
+   var updatedCache: [IndexPath]!
    var selectedCache = [IndexPath]()
    
    // minimum space between cells
@@ -35,7 +36,7 @@ class PhotosViewController: UIViewController {
       
       if selectedCache.isEmpty {
          // Button is to delete all photos and load new ones
-         // deleteAllPhotos()
+          deleteAllPhotos()
       } else {
          // Button is to delete selected photos
          deleteSelectedPhotos()
@@ -198,6 +199,22 @@ class PhotosViewController: UIViewController {
          print("Could not fetch \(error), \(error.userInfo)")
       }
       
+   }
+   
+   func deleteAllPhotos() {
+      
+      for photo in fetchedResultsController.fetchedObjects! {
+         managedContext.delete(photo)
+      }
+      
+      do {
+         try managedContext.save()
+      } catch let error as NSError {
+         print("Could not save context \(error), \(error.userInfo)")
+      }
+      
+      fetchPhotos(pin: pin!)
+
    }
    
    func deleteSelectedPhotos() {
@@ -386,6 +403,7 @@ extension PhotosViewController: NSFetchedResultsControllerDelegate {
    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
       insertedCache = [IndexPath]()
       deletedCache = [IndexPath]()
+      updatedCache = [IndexPath]()
    }
    
    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
@@ -398,8 +416,8 @@ extension PhotosViewController: NSFetchedResultsControllerDelegate {
       case .move:
          deletedCache.append(indexPath!)
          insertedCache.append(newIndexPath!)
-      default:
-         break
+      case .update:
+         updatedCache.append(indexPath!)
       }
    }
    
@@ -410,6 +428,9 @@ extension PhotosViewController: NSFetchedResultsControllerDelegate {
          }
          for indexPath in self.deletedCache {
             self.collectionView.deleteItems(at: [indexPath])
+         }
+         for indexPath in self.updatedCache {
+            self.collectionView.reloadItems(at: [indexPath])
          }
          }, completion: nil)
    }
