@@ -79,6 +79,8 @@ class PhotosViewController: UIViewController {
       
       collectionView.delegate = self
       collectionView.dataSource = self
+      collectionView.prefetchDataSource = self
+      collectionView.isPrefetchingEnabled = true
       
       // set-up the fetchedResultController
       
@@ -433,5 +435,19 @@ extension PhotosViewController: NSFetchedResultsControllerDelegate {
             self.collectionView.reloadItems(at: [indexPath])
          }
          }, completion: nil)
+   }
+}
+
+extension PhotosViewController: UICollectionViewDataSourcePrefetching {
+   
+   func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+
+      for indexPath in indexPaths {
+         // Create a cell
+         print("Prefetching cell")
+         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
+         
+         configure(cell, for: indexPath)
+      }
    }
 }
