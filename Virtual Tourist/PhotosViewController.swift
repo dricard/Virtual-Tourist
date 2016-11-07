@@ -204,16 +204,19 @@ class PhotosViewController: UIViewController {
    
    func deleteAllPhotos() {
       
+      // First delete all photos from the context
       for photo in fetchedResultsController.fetchedObjects! {
          managedContext.delete(photo)
       }
       
+      // save the context to persist the change
       do {
          try managedContext.save()
       } catch let error as NSError {
          print("Could not save context \(error), \(error.userInfo)")
       }
       
+      // refetch new photos from network
       fetchPhotos(pin: pin!)
 
    }
