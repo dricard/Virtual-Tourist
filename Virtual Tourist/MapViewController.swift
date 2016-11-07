@@ -48,24 +48,23 @@ class MapViewController: UIViewController, MKMapViewDelegate {
       // check CoreData for available Pins
       let pinFetch: NSFetchRequest<Pin> = Pin.fetchRequest()
       
-      asyncFetchRequest = NSAsynchronousFetchRequest<Pin>(fetchRequest: pinFetch) { [unowned self] (result: NSAsynchronousFetchResult) in
-         
-         guard let pins = result.finalResult else {
-            // no pins in CoreData, display onboarding experience
+      do {
+         // execute the fetch request
+         let pins = try managedContext.fetch(pinFetch)
+         // validate that there are pins in Core Data
+         if pins.isEmpty {
+            // no pins in Core Data, display onboarding experience
             self.displayOnBoarding()
             return
          }
-         
+         // display the pins on the map
          self.pins = pins
          self.displayPinsOnMap(pins: pins)
-      }
-      
-      do {
-         try managedContext.execute(asyncFetchRequest)
+         
       } catch let error as NSError {
          print("Fetch error: \(error), \(error.userInfo)")
       }
-      
+     
    }
    
    override func viewWillDisappear(_ animated: Bool) {
