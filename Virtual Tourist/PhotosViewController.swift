@@ -130,7 +130,6 @@ class PhotosViewController: UIViewController {
       
       navigationController?.navigationBar.isHidden = false
       
-//      setFlowLayout()
       
       print("In viewWillAppear")
       
@@ -271,32 +270,6 @@ extension PhotosViewController: UICollectionViewDelegate {
 
 // MARK: - Internals
 extension PhotosViewController {
-   
-   override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
-//      setFlowLayout()
-   }
-   
-   func setFlowLayout() {
-      
-      let screenWidth = view.frame.width
-      let screenHeight = view.frame.height
-      
-      // space around pictures
-      
-      var dimensionX, dimensionY: CGFloat
-      
-      if screenHeight > screenWidth {
-         dimensionX = (screenWidth - (1 * space)) / 2.0
-         dimensionY = (screenHeight - (5 * space)) / 4.0
-      } else {
-         dimensionY = (screenHeight - (2 * space)) / 2.0
-         dimensionX = (screenWidth - (5 * space)) / 4.0
-      }
-      
-//      flowLayout.minimumLineSpacing = space
-//      flowLayout.minimumInteritemSpacing = space
-//      flowLayout.itemSize = CGSize(width: dimensionX, height: dimensionY)
-   }
    
    func configure(_ cell: UICollectionViewCell, for indexPath: IndexPath) {
       
