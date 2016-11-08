@@ -317,14 +317,6 @@ extension PhotosViewController {
                   if let image = imageFromData {
                      let imageData = UIImagePNGRepresentation(image)
                      photo.image = imageData
-//                     managedContext.perform {
-//                        // save the context
-//                        do {
-//                           try self.managedContext.save()
-//                        } catch let error as NSError {
-//                           print("Could not save context \(error), \(error.userInfo)")
-//                        }
-                     }
                   } else {
                      print("Unable to get image from urlData")
                   }
