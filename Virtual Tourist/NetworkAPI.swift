@@ -37,9 +37,7 @@ class NetworkAPI: NSObject {
       // 2. Build URL
       guard var URL = URL(string: Flickr.FlickrBaseURL) else { return }
       URL = URL.URLByAppendingQueryParameters(URLParams)
-      
-      print(URL)
-      
+            
       // 3. configure the request
       let request = NSMutableURLRequest(url: URL)
       request.httpMethod = "GET"
