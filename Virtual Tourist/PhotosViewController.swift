@@ -81,6 +81,11 @@ class PhotosViewController: UIViewController {
       collectionView.prefetchDataSource = self
       collectionView.isPrefetchingEnabled = true
       
+      // Disable bottom button until photos are displayed
+      tabBarController?.tabBar.isHidden = true
+      button.isEnabled = false
+      configureButton()
+
       // set-up the fetchedResultController
       
       // 1. set the fetchRequest
@@ -113,14 +118,15 @@ class PhotosViewController: UIViewController {
          } else {
             // there are photos in this location so display them
 //            print("photos is not empty, display photos")
+            tabBarController?.tabBar.isHidden = false
+            button.isEnabled = true
+
          }
       } else {
          // photos is nil so there are no photos: fetch photos
 //         print("photos is nil, fetch photos")
          fetchPhotos(pin: pin!)
       }
-      
-      configureButton()
 
    }
    
@@ -197,6 +203,10 @@ class PhotosViewController: UIViewController {
 //            print("executing reFetch and reload")
             self.doFetch()
             self.collectionView.reloadData()
+            // re-enable the button
+            self.tabBarController?.tabBar.isHidden = false
+            self.button.isEnabled = true
+
          }
          
       }
@@ -213,7 +223,12 @@ class PhotosViewController: UIViewController {
    
    func deleteAllPhotos() {
       
-      // First delete all photos from the context
+      // First prevent the button from being pressed a second time
+      print("changing button state")
+      button.isEnabled = false
+      tabBarController?.tabBar.isHidden = true
+      
+      // Then delete all photos from the context
       for photo in fetchedResultsController.fetchedObjects! {
          managedContext.delete(photo)
       }
@@ -227,6 +242,7 @@ class PhotosViewController: UIViewController {
       
       // refetch new photos from network
       fetchPhotos(pin: pin!)
+      
 
    }
    
@@ -246,7 +262,8 @@ class PhotosViewController: UIViewController {
       
       // reset the selection of photos
       selectedCache.removeAll()
-      
+      // update the interface
+      configureButton()
       // save the context
       do {
          try managedContext.save()
