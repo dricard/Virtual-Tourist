@@ -48,7 +48,7 @@ class PhotosViewController: UIViewController {
    
    override func viewDidLoad() {
       super.viewDidLoad()
-      
+
       // set up portion of the map with the selected pin
       mapView.setRegion(focusedRegion!, animated: true)
       
