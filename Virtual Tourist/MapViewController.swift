@@ -45,7 +45,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
       // Restore the saved state of the map view
       restoreMapRegion(animated: true)
       
-      // check CoreData for available Pins
+      // check CoreData for all available Pins
       let pinFetch: NSFetchRequest<Pin> = Pin.fetchRequest()
       
       do {
@@ -74,6 +74,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
    }
    // MARK: - Utilities
    
+   // This is a utility function for the saveMapRegion method
    var filePath: String = {
       let manager = FileManager.default
       let url = manager.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -89,10 +90,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
       // It represents the zoom level of the map
       
       let dictionary = [
-         "latitude" : mapView.region.center.latitude,
-         "longitude": mapView.region.center.longitude,
-         "latitudeDelta" : mapView.region.span.latitudeDelta,
-         "longitudeDelta" : mapView.region.span.longitudeDelta
+         Const.latitudeKey : mapView.region.center.latitude,
+         Const.longitudeKey: mapView.region.center.longitude,
+         Const.latitudeDeltaKey : mapView.region.span.latitudeDelta,
+         Const.longitudeDeltaKey : mapView.region.span.longitudeDelta
       ]
       
       // Archive the dictionary using filePath computed property
@@ -109,12 +110,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
       
       if let regionDictionary = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? [String:AnyObject] {
          
-         let longitude = regionDictionary["longitude"] as! CLLocationDegrees
-         let latitude = regionDictionary["latitude"] as! CLLocationDegrees
+         let longitude = regionDictionary[Const.longitudeKey] as! CLLocationDegrees
+         let latitude = regionDictionary[Const.latitudeKey] as! CLLocationDegrees
          let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
          
-         let longitudeDelta = regionDictionary["longitudeDelta"] as! CLLocationDegrees
-         let latitudeDelta = regionDictionary["latitudeDelta"] as! CLLocationDegrees
+         let longitudeDelta = regionDictionary[Const.longitudeDeltaKey] as! CLLocationDegrees
+         let latitudeDelta = regionDictionary[Const.latitudeDeltaKey] as! CLLocationDegrees
          let span = MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta)
          
          let savedRegion = MKCoordinateRegion(center: center, span: span)
