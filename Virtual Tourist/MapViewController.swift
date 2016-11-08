@@ -231,6 +231,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
    // User selected a pin, transition to PhotosViewController
    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
       
+      // first unselect the pin
+      mapView.deselectAnnotation(view.annotation! , animated: true)
+
       guard view.annotation != nil else { return }
       
       let coordinate = view.annotation!.coordinate
