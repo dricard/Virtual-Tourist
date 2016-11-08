@@ -50,6 +50,7 @@ class PhotosViewController: UIViewController {
       
       // set up portion of the map with the selected pin
       mapView.setRegion(focusedRegion!, animated: true)
+      
       // Drop a pin at that location
       
       let lat = focusedRegion!.center.latitude
@@ -78,6 +79,8 @@ class PhotosViewController: UIViewController {
       
       collectionView.delegate = self
       collectionView.dataSource = self
+      
+      // new to iOS 10 - enable prefetcing
       collectionView.prefetchDataSource = self
       collectionView.isPrefetchingEnabled = true
       
@@ -90,7 +93,7 @@ class PhotosViewController: UIViewController {
       
       // 1. set the fetchRequest
       let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
-      fetchRequest.fetchBatchSize = 9
+      fetchRequest.fetchBatchSize = 18
 
       let idSort = NSSortDescriptor(key: #keyPath(Photo.id), ascending: true)
       fetchRequest.sortDescriptors = [idSort]
@@ -118,6 +121,7 @@ class PhotosViewController: UIViewController {
          } else {
             // there are photos in this location so display them
 //            print("photos is not empty, display photos")
+            // we need to enable the bottom button
             tabBarController?.tabBar.isHidden = false
             button.isEnabled = true
 
@@ -135,20 +139,15 @@ class PhotosViewController: UIViewController {
       
       navigationController?.navigationBar.isHidden = false
       
-      
-//      print("In viewWillAppear")
-      
-//      collectionView.reloadData()
 
    }
 
    // MARK: - Photos methods
 
    func fetchPhotos(pin: Pin) {
-//      print("Sending fetch photo request to Flickr")
+
       NetworkAPI.sendRequest(pin) { (photosDict, success, error) in
          
-//         print("returned from fetch photo request to Flickr")
          // GUARD: was there an error?
          guard error == nil else {
             print("Network request returned with error: \(error), \(error?.userInfo)")
@@ -166,16 +165,9 @@ class PhotosViewController: UIViewController {
             print("Photos dictionay returned is nil")
             return
          }
-
-//         guard photosDict!.isEmpty == false else {
-//            print("Photos dictionay returned is empty")
-//            return
-//         }
          
-         // Process the photos dictionary
-//         print("sending dispath global to process photos returned from flickr")
+         // Process the photos dictionary in a performAndWait block
          self.managedContext.performAndWait() {
-//            print("in dispath global")
             if let photosDict = photosDict {
                for photoDict in photosDict {
                   
@@ -189,18 +181,17 @@ class PhotosViewController: UIViewController {
                   photo.pin = pin
                }
             }
-            
+            // when all photos objects are created, save the context
             do {
                try self.managedContext.save()
             } catch let error as NSError {
                print("Could not save: \(error), \(error.userInfo)")
             }
-//            print("done executing dispatch global, save context was successful unless printed otherwise")
 
          }
          
+         // update the interface
          DispatchQueue.main.async {
-//            print("executing reFetch and reload")
             self.doFetch()
             self.collectionView.reloadData()
             // re-enable the button
@@ -212,10 +203,10 @@ class PhotosViewController: UIViewController {
       }
    }
    
+   // execute the fetch request
    func doFetch() {
-//      print("executing fetch RC")
          do {
-            try self.fetchedResultsController.performFetch()
+            try fetchedResultsController.performFetch()
          } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
          }
@@ -224,7 +215,6 @@ class PhotosViewController: UIViewController {
    func deleteAllPhotos() {
       
       // First prevent the button from being pressed a second time
-      print("changing button state")
       button.isEnabled = false
       tabBarController?.tabBar.isHidden = true
       
@@ -243,7 +233,6 @@ class PhotosViewController: UIViewController {
       // refetch new photos from network
       fetchPhotos(pin: pin!)
       
-
    }
    
    func deleteSelectedPhotos() {
@@ -275,6 +264,8 @@ class PhotosViewController: UIViewController {
       
 }
 
+// MARK: - EXTENSION - CollectionView Delegate
+
 extension PhotosViewController: UICollectionViewDelegate {
    
    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -297,9 +288,11 @@ extension PhotosViewController: UICollectionViewDelegate {
    
 }
 
-// MARK: - Internals
+// MARK: - EXTENSION - Internals
+
 extension PhotosViewController {
    
+   // Configure the collectionView cell
    func configure(_ cell: UICollectionViewCell, for indexPath: IndexPath) {
       
       guard let cell = cell as? PhotoCell else { return }
@@ -308,26 +301,30 @@ extension PhotosViewController {
 
       // get a reference to the object for the cell
       let photo = fetchedResultsController.object(at: indexPath)
-//      print("configuring cell for photo: \(photo.id!)")
       // default value for image
       image = UIImage(named: "logo_210")!
       // check to see if the image is already in core data
       if photo.image != nil {
          // image exists, use it
          image = UIImage(data: photo.image!)!
-//         print("Photo \(photo.id!) image exist")
       } else {
          // image has not been downloaded, try to download it
-//         print("Photo \(photo.id!) image doesn NOT exist -> downloading")
         if let imagePath = photo.imageURL {
             let imageURL = URL(string: imagePath)
                if let urlData = try? Data(contentsOf: imageURL!) {
-//                  print("Photo \(photo.id!) image downloaded successfully")
 
                   let imageFromData = UIImage(data: urlData)
                   if let image = imageFromData {
                      let imageData = UIImagePNGRepresentation(image)
                      photo.image = imageData
+//                     managedContext.perform {
+//                        // save the context
+//                        do {
+//                           try self.managedContext.save()
+//                        } catch let error as NSError {
+//                           print("Could not save context \(error), \(error.userInfo)")
+//                        }
+                     }
                   } else {
                      print("Unable to get image from urlData")
                   }
@@ -364,6 +361,8 @@ extension PhotosViewController {
    
 }
 
+// MARK: - EXTENSION - CollectionView Datasource
+
 extension PhotosViewController: UICollectionViewDataSource {
    
    // MARK: - CollectionView Datasource methods
@@ -380,7 +379,7 @@ extension PhotosViewController: UICollectionViewDataSource {
       guard let sectionInfo = fetchedResultsController.sections?[section] else {
          // we don't have photos yet, so fill a screen with placeholder images
          // while we wait
-         return 6
+         return 9
       }
       
       return sectionInfo.numberOfObjects
@@ -405,7 +404,7 @@ extension PhotosViewController: NSFetchedResultsControllerDelegate {
    
    
    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-      print("=== will change content")
+
       insertedCache = [IndexPath]()
       deletedCache = [IndexPath]()
       updatedCache = [IndexPath]()
@@ -415,23 +414,21 @@ extension PhotosViewController: NSFetchedResultsControllerDelegate {
       
       switch type {
       case .insert:
-         print("=== didChange .insert type")
+
          insertedCache.append(newIndexPath!)
       case .delete:
-         print("=== didChange .delete type")
+
          deletedCache.append(indexPath!)
       case .move:
          print("=== didChange .move type")
 //         deletedCache.append(indexPath!)
 //         insertedCache.append(newIndexPath!)
       case .update:
-         print("=== didChange .update type")
          updatedCache.append(indexPath!)
       }
    }
    
    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-      print("=== didChange content ===")
 
       collectionView.performBatchUpdates({
          for indexPath in self.insertedCache {
@@ -447,13 +444,15 @@ extension PhotosViewController: NSFetchedResultsControllerDelegate {
    }
 }
 
+// MARK: - EXTENSION - collectionView Data Source Prefetching
+
 extension PhotosViewController: UICollectionViewDataSourcePrefetching {
    
    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
 
       for indexPath in indexPaths {
          // Create a cell
-         print("Prefetching cell")
+
          let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
          
          configure(cell, for: indexPath)
