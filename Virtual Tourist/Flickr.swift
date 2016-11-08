@@ -13,10 +13,10 @@ enum Flickr {
    // API related
    static let FlickrBaseURL = "https://api.flickr.com/services/rest/"
    static let PhotoSearchMethod = "flickr.photos.search"
-   static let PhotoSearchRadius = "2"
+   static let PhotoSearchRadius = "1"
    static let Photos = "photos"
    static let Photo = "photo"
-   static let PerPage = "200"
+   static let PerPage = "50"
    
    
    // Dictionary keys
