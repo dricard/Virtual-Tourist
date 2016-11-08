@@ -178,13 +178,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
       }
    }
    
+   // MARK: - Segue methods
+   
    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+      // pass the selected pin and the managedContext to the PhotosViewController
       let controller = segue.destination as! PhotosViewController
       controller.pin = pin
       controller.managedContext = managedContext
       controller.focusedRegion = region
    }
-   
    
    func presentPhotosViewController(pin: Pin, coordinate: CLLocationCoordinate2D) {
       
@@ -202,6 +204,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
    // MARK: - MapView Delegates
    
    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+      
       let reuseId = "pin"
       
       var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
@@ -225,6 +228,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
       }
    }
    
+   // User selected a pin, transition to PhotosViewController
    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
       
       guard view.annotation != nil else { return }
