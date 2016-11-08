@@ -99,6 +99,12 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Images at location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uik-b7-Tbl">
+                                <rect key="frame" x="104" y="323" width="166" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t1u-y5-4Lp">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <constraints>
@@ -120,6 +126,8 @@
                             <constraint firstItem="g7m-9i-N4N" firstAttribute="top" secondItem="h8N-cJ-sb1" secondAttribute="bottom" identifier="map_top" id="Asd-zQ-I6u"/>
                             <constraint firstItem="t1u-y5-4Lp" firstAttribute="leading" secondItem="f9Z-Tq-7gJ" secondAttribute="leading" id="M3D-Ot-W4Z"/>
                             <constraint firstItem="t1u-y5-4Lp" firstAttribute="top" secondItem="BuX-fd-fzx" secondAttribute="bottom" id="MXJ-gz-WbW"/>
+                            <constraint firstItem="Uik-b7-Tbl" firstAttribute="centerX" secondItem="f9Z-Tq-7gJ" secondAttribute="centerX" id="Mur-7e-OGa"/>
+                            <constraint firstItem="Uik-b7-Tbl" firstAttribute="centerY" secondItem="f9Z-Tq-7gJ" secondAttribute="centerY" id="R80-aP-LZa"/>
                             <constraint firstItem="pBg-ep-eoS" firstAttribute="top" secondItem="t1u-y5-4Lp" secondAttribute="bottom" id="W7g-CV-cHo"/>
                             <constraint firstAttribute="trailing" secondItem="g7m-9i-N4N" secondAttribute="trailing" identifier="map_trailing" id="Wjg-tK-24t"/>
                             <constraint firstItem="BuX-fd-fzx" firstAttribute="top" secondItem="h8N-cJ-sb1" secondAttribute="bottom" constant="160" identifier="col_top" id="eqa-0E-DVb"/>
@@ -134,6 +142,7 @@
                         <outlet property="collectionView" destination="BuX-fd-fzx" id="lcl-3O-RQm"/>
                         <outlet property="flowLayout" destination="BuX-fd-fzx" id="iLo-1I-OB3"/>
                         <outlet property="mapView" destination="g7m-9i-N4N" id="r2D-gF-Ulb"/>
+                        <outlet property="noImagesLabel" destination="Uik-b7-Tbl" id="Mb2-BJ-B6x"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lhe-Fh-uYy" userLabel="First Responder" sceneMemberID="firstResponder"/>

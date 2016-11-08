@@ -32,6 +32,7 @@ class PhotosViewController: UIViewController {
    @IBOutlet weak var collectionView: UICollectionView!
    @IBOutlet weak var mapView: MKMapView!
    @IBOutlet weak var button: UIBarButtonItem!
+   @IBOutlet weak var noImagesLabel: UILabel!
    @IBAction func buttonTapped(_ sender: Any) {
       
       if selectedCache.isEmpty {
@@ -169,6 +170,16 @@ class PhotosViewController: UIViewController {
          // Process the photos dictionary in a performAndWait block
          self.managedContext.performAndWait() {
             if let photosDict = photosDict {
+               if photosDict.count == 0 {
+                  // NO photos in returned data
+                  // Display label to indicate no photos to user
+                  self.noImagesLabel.isHidden = false
+                  // Disable interface for deleting or reloading photos
+                  self.button.isEnabled = false
+                  self.tabBarController?.tabBar.isHidden = true
+               } else {
+                  self.noImagesLabel.isHidden = true
+               }
                for photoDict in photosDict {
                   
                   // Here we download all the photos' URL and title,
@@ -194,9 +205,11 @@ class PhotosViewController: UIViewController {
          DispatchQueue.main.async {
             self.doFetch()
             self.collectionView.reloadData()
-            // re-enable the button
-            self.tabBarController?.tabBar.isHidden = false
-            self.button.isEnabled = true
+            // re-enable the button if photos were found
+            if (self.fetchedResultsController.fetchedObjects?.count)! > 0 {
+               self.tabBarController?.tabBar.isHidden = false
+               self.button.isEnabled = true
+            }
 
          }
          
