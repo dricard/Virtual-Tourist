@@ -323,21 +323,26 @@ extension PhotosViewController {
       } else {
          // image has not been downloaded, try to download it
         if let imagePath = photo.imageURL {
-            let imageURL = URL(string: imagePath)
-               if let urlData = try? Data(contentsOf: imageURL!) {
-
-                  let imageFromData = UIImage(data: urlData)
-                  if let image = imageFromData {
-                     let imageData = UIImagePNGRepresentation(image)
-                     photo.image = imageData
-                  } else {
-                     print("Unable to get image from urlData")
-                  }
-                  
-               } else {
-                  print("Unable to get imageData from imageURL")
+            NetworkAPI.requestPhotoData(photoURL: imagePath) { (result, error) in
+               
+               // GUARD - check for error
+               guard error == nil else {
+                  print("Error fetching photo data: \(error)")
+                  return
                }
-
+               
+               // GUARD - check for valid data
+               guard let result = result else {
+                  print("No data returned for photo")
+                  return
+               }
+               
+               // Dispatch on main queue to update photo image
+               DispatchQueue.main.async {
+                  photo.image = result as Data
+                  cell.imageView.image = UIImage(data: result as Data)
+               }
+            }
          }
       }
       

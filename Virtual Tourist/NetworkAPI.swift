@@ -37,7 +37,7 @@ class NetworkAPI: NSObject {
       // 2. Build URL
       guard var URL = URL(string: Flickr.FlickrBaseURL) else { return }
       URL = URL.URLByAppendingQueryParameters(URLParams)
-            
+      
       // 3. configure the request
       let request = NSMutableURLRequest(url: URL)
       request.httpMethod = "GET"
@@ -75,7 +75,7 @@ class NetworkAPI: NSObject {
          // 5. parse the data
          
          let parsedResult = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:AnyObject]
-   
+         
          // 6. use the data
          
          // GUARD: get the photos root obkect from the parse data
@@ -94,12 +94,40 @@ class NetworkAPI: NSObject {
          
          
       })
+      
+      task.resume()
+      
+   }
+   
+   
+   static func requestPhotoData(photoURL: String, completionHandlerForConvertData: @escaping (_ result: NSData?, _ error: String?) -> Void) {
+      
+      let requestURL: NSURL = NSURL(string: photoURL)!
+      
+      let task = URLSession.shared.dataTask(with: requestURL as URL) { (data, response, error) in
          
+         // GUARD - check for errors
+         guard error == nil else {
+            print("Could not parse data")
+            completionHandlerForConvertData(nil, "Could not parse data")
+            return
+         }
+         
+         // GUARD - check for data
+         guard let data = data else {
+            print("No data return for photo")
+            completionHandlerForConvertData(nil, "No data returned for photo")
+            return
+         }
+         
+         // all is good, return the data
+         completionHandlerForConvertData(data as NSData, nil)
+      }
+      
       task.resume()
       
    }
 }
-
 
 protocol URLQueryParameterStringConvertible {
    var queryParameters: String {get}
