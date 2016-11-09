@@ -21,11 +21,11 @@ The code is well documented. More information can be found on the [project's pag
 
 #### Swift and Xcode versions
 
-This project is for **Swift version 2.2** and **Xcode version 7.3**.
+This project is for **Swift version 3.0** and **Xcode version 8.1**.
 
 #### More information
 
-More information and screenshots can be found on the [project's page](http://hexaedre.com/projects/virtual-tourist/). If you have questions I'd be happy to help. Contact information can be found below or on the project's page.
+More information and screenshots can be found on the [project's page](http://hexaedre.com/apps/virtual-tourist/). If you have questions I'd be happy to help. Contact information can be found below or on the project's page.
 
 #### How to contribute
 
