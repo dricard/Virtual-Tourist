@@ -70,8 +70,23 @@ class MapViewController: UIViewController, MKMapViewDelegate {
    override func viewWillDisappear(_ animated: Bool) {
       // we're going to another view, let's save the current state
       saveMapRegion()
-      
    }
+   
+   override func viewWillAppear(_ animated: Bool) {
+      // Here we save the context for the following reason:
+      // If the user pressed a pin and moved to the PhotosViewController
+      // Photos might have been downloaded, deleted, etc. So we save here
+      // to preserve the data when the user returns from that VC
+      
+      do {
+         try managedContext.save()
+      } catch let error as NSError {
+         print("Could not save context \(error), \(error.userInfo)")
+      }
+
+   }
+   
+   
    // MARK: - Utilities
    
    // This is a utility function for the saveMapRegion method
