@@ -37,7 +37,7 @@ class PhotosViewController: UIViewController {
       
       if selectedCache.isEmpty {
          // Button is to delete all photos and load new ones
-          deleteAllPhotos()
+         deleteAllPhotos()
       } else {
          // Button is to delete selected photos
          deleteSelectedPhotos()
@@ -48,7 +48,7 @@ class PhotosViewController: UIViewController {
    
    override func viewDidLoad() {
       super.viewDidLoad()
-
+      
       // set up portion of the map with the selected pin
       mapView.setRegion(focusedRegion!, animated: true)
       
@@ -75,7 +75,7 @@ class PhotosViewController: UIViewController {
       let width = floor(view.frame.width/3)
       layout.itemSize = CGSize(width: width, height: width)
       collectionView.collectionViewLayout = layout
-
+      
       // set delegates for the collectionView
       
       collectionView.delegate = self
@@ -89,13 +89,13 @@ class PhotosViewController: UIViewController {
       tabBarController?.tabBar.isHidden = true
       button.isEnabled = false
       configureButton()
-
+      
       // set-up the fetchedResultController
       
       // 1. set the fetchRequest
       let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
       fetchRequest.fetchBatchSize = 18
-
+      
       let idSort = NSSortDescriptor(key: #keyPath(Photo.id), ascending: true)
       fetchRequest.sortDescriptors = [idSort]
       fetchRequest.predicate = NSPredicate(format: "pin = %@", pin!)
@@ -111,28 +111,28 @@ class PhotosViewController: UIViewController {
       // 4. perform the fetch
       
       doFetch()
-
+      
       
       if let photos = fetchedResultsController.fetchedObjects {
          
          if photos.count == 0 {
             // no photos at this location, fetch new ones
-//            print("photos is empty, fetch new photos")
+            //            print("photos is empty, fetch new photos")
             fetchPhotos(pin: pin!)
          } else {
             // there are photos in this location so display them
-//            print("photos is not empty, display photos")
+            //            print("photos is not empty, display photos")
             // we need to enable the bottom button
             tabBarController?.tabBar.isHidden = false
             button.isEnabled = true
-
+            
          }
       } else {
          // photos is nil so there are no photos: fetch photos
-//         print("photos is nil, fetch photos")
+         //         print("photos is nil, fetch photos")
          fetchPhotos(pin: pin!)
       }
-
+      
    }
    
    override func viewWillAppear(_ animated: Bool) {
@@ -140,13 +140,13 @@ class PhotosViewController: UIViewController {
       
       navigationController?.navigationBar.isHidden = false
       
-
+      
    }
-
+   
    // MARK: - Photos methods
-
+   
    func fetchPhotos(pin: Pin) {
-
+      
       NetworkAPI.sendRequest(pin) { (photosDict, success, error) in
          
          // GUARD: was there an error?
@@ -167,50 +167,48 @@ class PhotosViewController: UIViewController {
             return
          }
          
-         // Process the photos dictionary in a performAndWait block
-         self.managedContext.performAndWait() {
-            if let photosDict = photosDict {
-               if photosDict.count == 0 {
-                  // NO photos in returned data
-                  // Display label to indicate no photos to user
-                  self.noImagesLabel.isHidden = false
-                  // Disable interface for deleting or reloading photos
-                  self.button.isEnabled = false
-                  self.tabBarController?.tabBar.isHidden = true
-               } else {
-                  self.noImagesLabel.isHidden = true
-               }
-               for photoDict in photosDict {
-                  
-                  // Here we download all the photos' URL and title,
-                  // but not the actual photos, this is done in the cellForItemAtIndexpath method
-                  // as each photo is required (and if needed)
-                  let photo = Photo(context: self.managedContext)
-                  photo.title = photoDict[Flickr.Title] as? String
-                  photo.id = photoDict[Flickr.ID] as? String
-                  photo.imageURL = photoDict[Flickr.ImagePath] as? String
-                  photo.pin = pin
-               }
-            }
-            // when all photos objects are created, save the context
-            do {
-               try self.managedContext.save()
-            } catch let error as NSError {
-               print("Could not save: \(error), \(error.userInfo)")
-            }
-
-         }
-         
-         // update the interface
+         // Process the photos dictionary asynchronously on the main thread
          DispatchQueue.main.async {
-            self.doFetch()
-            self.collectionView.reloadData()
+            self.managedContext.performAndWait() {
+               if let photosDict = photosDict {
+                  if photosDict.count == 0 {
+                     // NO photos in returned data
+                     // Display label to indicate no photos to user
+                     self.noImagesLabel.isHidden = false
+                     // Disable interface for deleting or reloading photos
+                     self.button.isEnabled = false
+                     self.tabBarController?.tabBar.isHidden = true
+                  } else {
+                     self.noImagesLabel.isHidden = true
+                  }
+                  for photoDict in photosDict {
+                     
+                     // Here we download all the photos' URL and title,
+                     // but not the actual photos, this is done in the cellForItemAtIndexpath method
+                     // as each photo is required (and if needed)
+                     let photo = Photo(context: self.managedContext)
+                     photo.title = photoDict[Flickr.Title] as? String
+                     photo.id = photoDict[Flickr.ID] as? String
+                     photo.imageURL = photoDict[Flickr.ImagePath] as? String
+                     photo.pin = pin
+                  }
+               }
+               // when all photos objects are created, save the context
+               do {
+                  try self.managedContext.save()
+               } catch let error as NSError {
+                  print("Could not save: \(error), \(error.userInfo)")
+               }
+               
+            }
+            
             // re-enable the button if photos were found
             if (self.fetchedResultsController.fetchedObjects?.count)! > 0 {
                self.tabBarController?.tabBar.isHidden = false
                self.button.isEnabled = true
+               
             }
-
+            
          }
          
       }
@@ -218,11 +216,11 @@ class PhotosViewController: UIViewController {
    
    // execute the fetch request
    func doFetch() {
-         do {
-            try fetchedResultsController.performFetch()
-         } catch let error as NSError {
-            print("Could not fetch \(error), \(error.userInfo)")
-         }
+      do {
+         try fetchedResultsController.performFetch()
+      } catch let error as NSError {
+         print("Could not fetch \(error), \(error.userInfo)")
+      }
    }
    
    func deleteAllPhotos() {
@@ -272,9 +270,9 @@ class PhotosViewController: UIViewController {
       } catch let error as NSError {
          print("Could not save context \(error), \(error.userInfo)")
       }
-
-   }
       
+   }
+   
 }
 
 // MARK: - EXTENSION - CollectionView Delegate
@@ -311,7 +309,7 @@ extension PhotosViewController {
       guard let cell = cell as? PhotoCell else { return }
       
       var image: UIImage
-
+      
       // get a reference to the object for the cell
       let photo = fetchedResultsController.object(at: indexPath)
       // default value for image
@@ -322,7 +320,7 @@ extension PhotosViewController {
          image = UIImage(data: photo.image!)!
       } else {
          // image has not been downloaded, try to download it
-        if let imagePath = photo.imageURL {
+         if let imagePath = photo.imageURL {
             NetworkAPI.requestPhotoData(photoURL: imagePath) { (result, error) in
                
                // GUARD - check for error
@@ -405,7 +403,7 @@ extension PhotosViewController: UICollectionViewDataSource {
       
       return cell
    }
-      
+   
 }
 
 // MARK: - NSFetchedResultsControllerDelegate
@@ -414,7 +412,7 @@ extension PhotosViewController: NSFetchedResultsControllerDelegate {
    
    
    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-
+      
       insertedCache = [IndexPath]()
       deletedCache = [IndexPath]()
       updatedCache = [IndexPath]()
@@ -424,22 +422,22 @@ extension PhotosViewController: NSFetchedResultsControllerDelegate {
       
       switch type {
       case .insert:
-
+         
          insertedCache.append(newIndexPath!)
       case .delete:
-
+         
          deletedCache.append(indexPath!)
       case .move:
          print("=== didChange .move type")
-//         deletedCache.append(indexPath!)
-//         insertedCache.append(newIndexPath!)
+         //         deletedCache.append(indexPath!)
+      //         insertedCache.append(newIndexPath!)
       case .update:
          updatedCache.append(indexPath!)
       }
    }
    
    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-
+      
       collectionView.performBatchUpdates({
          for indexPath in self.insertedCache {
             self.collectionView.insertItems(at: [indexPath])
@@ -450,7 +448,7 @@ extension PhotosViewController: NSFetchedResultsControllerDelegate {
          for indexPath in self.updatedCache {
             self.collectionView.reloadItems(at: [indexPath])
          }
-         }, completion: nil)
+      }, completion: nil)
    }
 }
 
@@ -459,10 +457,10 @@ extension PhotosViewController: NSFetchedResultsControllerDelegate {
 extension PhotosViewController: UICollectionViewDataSourcePrefetching {
    
    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-
+      
       for indexPath in indexPaths {
          // Create a cell
-
+         
          let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
          
          configure(cell, for: indexPath)
