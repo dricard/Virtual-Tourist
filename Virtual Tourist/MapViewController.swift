@@ -158,7 +158,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
    }
    
    func displayOnBoarding() {
-      print("onboarding experience")
+      // TODO: An improvement would be to implement an onboarding experience
    }
    
    // MARK: - User action methods
