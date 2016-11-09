@@ -314,7 +314,7 @@ extension PhotosViewController {
       // get a reference to the object for the cell
       let photo = fetchedResultsController.object(at: indexPath)
       // default value for image
-      image = UIImage(named: "logo_210")!
+      image = UIImage(named: "placeholderImage")!
       // check to see if the image is already in core data
       if photo.image != nil {
          // image exists, use it
