@@ -85,15 +85,21 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="n9f-Be-jOw">
                                                     <rect key="frame" x="0.0" y="0.0" width="140" height="107"/>
                                                 </imageView>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="KxJ-c8-9Ag">
+                                                    <rect key="frame" x="60" y="43" width="20" height="20"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                         </view>
                                         <constraints>
+                                            <constraint firstItem="KxJ-c8-9Ag" firstAttribute="centerY" secondItem="nfB-64-ZgY" secondAttribute="centerY" id="CUK-fe-tVf"/>
                                             <constraint firstItem="n9f-Be-jOw" firstAttribute="top" secondItem="nfB-64-ZgY" secondAttribute="top" id="g5V-SC-CxZ"/>
+                                            <constraint firstItem="KxJ-c8-9Ag" firstAttribute="centerX" secondItem="nfB-64-ZgY" secondAttribute="centerX" id="o1T-Ld-tlh"/>
                                             <constraint firstItem="n9f-Be-jOw" firstAttribute="leading" secondItem="nfB-64-ZgY" secondAttribute="leading" id="qZF-Vt-rHf"/>
                                             <constraint firstAttribute="bottom" secondItem="n9f-Be-jOw" secondAttribute="bottom" id="rhW-H7-5tl"/>
                                             <constraint firstAttribute="trailing" secondItem="n9f-Be-jOw" secondAttribute="trailing" id="xN7-AI-bFY"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="activityIndicator" destination="KxJ-c8-9Ag" id="Cnu-Im-ubY"/>
                                             <outlet property="imageView" destination="n9f-Be-jOw" id="YuI-05-z5j"/>
                                         </connections>
                                     </collectionViewCell>

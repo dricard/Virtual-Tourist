@@ -309,7 +309,8 @@ extension PhotosViewController {
       guard let cell = cell as? PhotoCell else { return }
       
       var image: UIImage
-      
+      cell.activityIndicator.hidesWhenStopped = true
+      cell.activityIndicator.startAnimating()
       // get a reference to the object for the cell
       let photo = fetchedResultsController.object(at: indexPath)
       // default value for image
@@ -317,6 +318,7 @@ extension PhotosViewController {
       // check to see if the image is already in core data
       if photo.image != nil {
          // image exists, use it
+         cell.activityIndicator.stopAnimating()
          image = UIImage(data: photo.image!)!
       } else {
          // image has not been downloaded, try to download it
@@ -337,6 +339,7 @@ extension PhotosViewController {
                
                // Dispatch on main queue to update photo image
                DispatchQueue.main.async {
+                  cell.activityIndicator.stopAnimating()
                   photo.image = result as Data
                   cell.imageView.image = UIImage(data: result as Data)
                }
