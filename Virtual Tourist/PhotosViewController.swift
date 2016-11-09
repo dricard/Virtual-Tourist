@@ -117,19 +117,15 @@ class PhotosViewController: UIViewController {
          
          if photos.count == 0 {
             // no photos at this location, fetch new ones
-            //            print("photos is empty, fetch new photos")
             fetchPhotos(pin: pin!)
          } else {
-            // there are photos in this location so display them
-            //            print("photos is not empty, display photos")
+            // there are photos in this location so display them (nothing to do for that, except...)
             // we need to enable the bottom button
             tabBarController?.tabBar.isHidden = false
             button.isEnabled = true
-            
          }
       } else {
          // photos is nil so there are no photos: fetch photos
-         //         print("photos is nil, fetch photos")
          fetchPhotos(pin: pin!)
       }
       
@@ -147,6 +143,7 @@ class PhotosViewController: UIViewController {
    
    func fetchPhotos(pin: Pin) {
       
+      // Send the request to the Flickr API to get photos at location
       NetworkAPI.sendRequest(pin) { (photosDict, success, error) in
          
          // GUARD: was there an error?
@@ -179,12 +176,13 @@ class PhotosViewController: UIViewController {
                      self.button.isEnabled = false
                      self.tabBarController?.tabBar.isHidden = true
                   } else {
+                     // We have images so hide the "no photos" label
                      self.noImagesLabel.isHidden = true
                   }
+                  // process the photos in the returned dictionary
                   for photoDict in photosDict {
-                     
-                     // Here we download all the photos' URL and title,
-                     // but not the actual photos, this is done in the cellForItemAtIndexpath method
+                     // Here we save the photos' URL, ID and title but not the actual photos,
+                     // that is done in the cellForItemAtIndexpath method
                      // as each photo is required (and if needed)
                      let photo = Photo(context: self.managedContext)
                      photo.title = photoDict[Flickr.Title] as? String
@@ -202,7 +200,7 @@ class PhotosViewController: UIViewController {
                
             }
             
-            // re-enable the button if photos were found
+            // and re-enable the button if photos were found
             if (self.fetchedResultsController.fetchedObjects?.count)! > 0 {
                self.tabBarController?.tabBar.isHidden = false
                self.button.isEnabled = true
@@ -211,15 +209,6 @@ class PhotosViewController: UIViewController {
             
          }
          
-      }
-   }
-   
-   // execute the fetch request
-   func doFetch() {
-      do {
-         try fetchedResultsController.performFetch()
-      } catch let error as NSError {
-         print("Could not fetch \(error), \(error.userInfo)")
       }
    }
    
@@ -250,7 +239,7 @@ class PhotosViewController: UIViewController {
       
       var photosToDelete = [Photo]()
       
-      // get the list of Photos to delete
+      // get the list of Photos to delete from the indexPath array
       for indexPath in selectedCache {
          photosToDelete.append(fetchedResultsController.object(at: indexPath))
       }
@@ -262,8 +251,10 @@ class PhotosViewController: UIViewController {
       
       // reset the selection of photos
       selectedCache.removeAll()
+
       // update the interface
       configureButton()
+
       // save the context
       do {
          try managedContext.save()
@@ -272,7 +263,19 @@ class PhotosViewController: UIViewController {
       }
       
    }
+
+   // MARK: - Fetch Request method
    
+   // execute the fetch request
+   func doFetch() {
+      do {
+         try fetchedResultsController.performFetch()
+      } catch let error as NSError {
+         print("Could not fetch \(error), \(error.userInfo)")
+      }
+   }
+   
+
 }
 
 // MARK: - EXTENSION - CollectionView Delegate
@@ -309,8 +312,11 @@ extension PhotosViewController {
       guard let cell = cell as? PhotoCell else { return }
       
       var image: UIImage
+      
+      // set-up activity indicator
       cell.activityIndicator.hidesWhenStopped = true
       cell.activityIndicator.startAnimating()
+      
       // get a reference to the object for the cell
       let photo = fetchedResultsController.object(at: indexPath)
       // default value for image
@@ -388,9 +394,7 @@ extension PhotosViewController: UICollectionViewDataSource {
    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
       
       guard let sectionInfo = fetchedResultsController.sections?[section] else {
-         // we don't have photos yet, so fill a screen with placeholder images
-         // while we wait
-         return 9
+         return 0
       }
       
       return sectionInfo.numberOfObjects
@@ -432,8 +436,8 @@ extension PhotosViewController: NSFetchedResultsControllerDelegate {
          deletedCache.append(indexPath!)
       case .move:
          print("=== didChange .move type")
-         //         deletedCache.append(indexPath!)
-      //         insertedCache.append(newIndexPath!)
+         deletedCache.append(indexPath!)
+         insertedCache.append(newIndexPath!)
       case .update:
          updatedCache.append(indexPath!)
       }
